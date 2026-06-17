@@ -12,8 +12,14 @@ export const AdminProvider = ({ children }) => {
     const adminData = localStorage.getItem('admin');
     
     if (token && adminData) {
-      setAdmin(JSON.parse(adminData));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      try {
+        setAdmin(JSON.parse(adminData));
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      } catch (error) {
+        console.error('Error loading admin data:', error);
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('admin');
+      }
     }
     setLoading(false);
   }, []);

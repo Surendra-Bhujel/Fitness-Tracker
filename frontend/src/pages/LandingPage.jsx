@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FaHeartbeat, FaFire, FaMedal, FaArrowRight, FaDumbbell, FaChartLine, FaRunning } from 'react-icons/fa';
+import { FaHeartbeat, FaFire, FaMedal, FaArrowRight, FaDumbbell, FaChartLine, FaRunning, FaShieldAlt } from 'react-icons/fa';
 
 const LandingPage = () => {
   const containerVariants = {
@@ -105,6 +105,13 @@ const LandingPage = () => {
                     className="btn btn-outline-light btn-lg px-5 py-3 fw-semibold"
                   >
                     Sign In
+                  </Link>
+                  {/* 👇 NEW: Admin Login Button */}
+                  <Link 
+                    to="/admin/login" 
+                    className="btn btn-outline-light btn-lg px-5 py-3 fw-semibold"
+                  >
+                    <FaShieldAlt className="me-2" /> Admin
                   </Link>
                 </motion.div>
               </motion.div>
