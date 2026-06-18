@@ -11,7 +11,7 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // 🔍 DEBUG - Check what's coming from frontend
+    //  DEBUG - Check what's coming from frontend
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('🔐 Login Attempt:');
     console.log('Email:', email);

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
 import { FaEye, FaEyeSlash, FaDumbbell, FaUserPlus } from 'react-icons/fa';
+import API from '../services/api';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -37,7 +38,7 @@ const RegisterPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
+      const response = await API.post('/auth/register', {
         name,
         email,
         password,

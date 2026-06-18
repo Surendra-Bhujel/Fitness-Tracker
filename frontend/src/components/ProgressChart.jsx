@@ -11,9 +11,9 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts';
+import { FaChartBar, FaChartLine } from 'react-icons/fa';
 
 const ProgressChart = ({ workouts }) => {
-  // Process data for last 7 days
   const getLast7DaysData = () => {
     const last7Days = [];
     const today = new Date();
@@ -23,7 +23,6 @@ const ProgressChart = ({ workouts }) => {
       date.setDate(today.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
       
-      // Sum workouts for this day
       const dayWorkouts = workouts.filter(w => {
         const workoutDate = new Date(w.date).toISOString().split('T')[0];
         return workoutDate === dateStr;
@@ -48,51 +47,72 @@ const ProgressChart = ({ workouts }) => {
 
   if (workouts.length === 0) {
     return (
-      <div className="card">
-        <div className="card-body text-center py-5">
-          <p className="text-muted mb-0">
-            Complete some workouts to see your progress chart!
-          </p>
-        </div>
+      <div className="text-center py-5">
+        <FaChartBar size={48} className="text-secondary opacity-25 mb-3" />
+        <p className="text-muted mb-0">Complete some workouts to see your progress!</p>
+        <small className="text-muted">Your charts will appear here once you start tracking</small>
       </div>
     );
   }
 
   return (
-    <div className="card">
-      <div className="card-header">
-        <h5>Weekly Progress</h5>
-      </div>
-      <div className="card-body">
-        <h6 className="mb-3">Calories Burned Over Time</h6>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="calories"
-              stroke="#8884d8"
-              name="Calories Burned"
-              strokeWidth={2}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+    <div>
+      <div className="row g-3">
+        <div className="col-lg-6">
+          <h6 className="text-white-50 small mb-3">
+            <FaChartLine className="me-2 text-teal" /> Calories Burned
+          </h6>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis dataKey="day" stroke="#64748b" />
+              <YAxis stroke="#64748b" />
+              <Tooltip 
+                contentStyle={{ 
+                  background: '#1e293b', 
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: 'white'
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="calories" 
+                stroke="#14b8a6" 
+                strokeWidth={3}
+                dot={{ fill: '#14b8a6', r: 5 }}
+                name="Calories"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
         
-        <h6 className="mb-3 mt-4">Workout Duration (minutes)</h6>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="duration" fill="#82ca9d" name="Duration (min)" />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="col-lg-6">
+          <h6 className="text-white-50 small mb-3">
+            <FaChartBar className="me-2 text-teal" /> Duration (minutes)
+          </h6>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis dataKey="day" stroke="#64748b" />
+              <YAxis stroke="#64748b" />
+              <Tooltip 
+                contentStyle={{ 
+                  background: '#1e293b', 
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: 'white'
+                }}
+              />
+              <Bar 
+                dataKey="duration" 
+                fill="#14b8a6" 
+                radius={[6, 6, 0, 0]}
+                name="Duration"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

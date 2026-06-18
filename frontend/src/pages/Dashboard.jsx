@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import WorkoutForm from '../components/WorkoutForm';
 import WorkoutList from '../components/WorkoutList';
 import ProgressChart from '../components/ProgressChart';
+import API from '../services/api';
 
 const Dashboard = () => {
   const [workouts, setWorkouts] = useState([]);
@@ -27,7 +28,7 @@ const Dashboard = () => {
 
   const fetchWorkouts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/workouts');
+      const response = await API.get('/workouts');
       setWorkouts(response.data);
     } catch (error) {
       console.error('Error fetching workouts:', error);
@@ -52,7 +53,7 @@ const Dashboard = () => {
 
   const addWorkout = async (workoutData) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/workouts', workoutData);
+      const response = await API.post('/workouts', workoutData);
       setWorkouts([response.data, ...workouts]);
     } catch (error) {
       console.error('Error adding workout:', error);
@@ -62,7 +63,7 @@ const Dashboard = () => {
 
   const updateWorkout = async (id, updatedData) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/workouts/${id}`, updatedData);
+      const response = await API.put(`/workouts/${id}`, updatedData);
       setWorkouts(workouts.map(w => w._id === id ? response.data : w));
     } catch (error) {
       console.error('Error updating workout:', error);
@@ -72,7 +73,7 @@ const Dashboard = () => {
 
   const deleteWorkout = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/workouts/${id}`);
+      await API.delete(`/workouts/${id}`);
       setWorkouts(workouts.filter(w => w._id !== id));
     } catch (error) {
       console.error('Error deleting workout:', error);
@@ -95,65 +96,70 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <div className="container mt-4">
-        <h1 className="mb-4">My Fitness Dashboard</h1>
-        
-        {/* Stats Cards */}
-        <div className="row mb-4">
-          <div className="col-md-4">
-            <div className="card bg-primary text-white">
-              <div className="card-body">
-                <h5 className="card-title">Total Workouts</h5>
-                <h2 className="display-4">{stats.totalWorkouts}</h2>
+      <div className="container-fluid px-4 py-4"> {/* Changed to container-fluid + adjusted padding */}
+        <div className="row justify-content-center">
+          <div className="col-12 col-xl-11"> {/* Limits max width on very large screens but removes side gaps */}
+            <h1 className="mb-4 text-center">My Fitness Dashboard</h1>
+            
+            {/* Stats Cards */}
+            <div className="row mb-4 g-3">
+              <div className="col-md-4">
+                <div className="card bg-primary text-white h-100">
+                  <div className="card-body text-center">
+                    <h5 className="card-title">Total Workouts</h5>
+                    <h2 className="display-4 mb-0">{stats.totalWorkouts}</h2>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card bg-success text-white h-100">
+                  <div className="card-body text-center">
+                    <h5 className="card-title">Total Calories Burned</h5>
+                    <h2 className="display-4 mb-0">{stats.totalCalories}</h2>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card bg-info text-white h-100">
+                  <div className="card-body text-center">
+                    <h5 className="card-title">Avg. Duration (min)</h5>
+                    <h2 className="display-4 mb-0">{stats.avgDuration}</h2>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-md-4">
-            <div className="card bg-success text-white">
-              <div className="card-body">
-                <h5 className="card-title">Total Calories Burned</h5>
-                <h2 className="display-4">{stats.totalCalories}</h2>
-              </div>
+            
+            {/* Progress Chart */}
+            <div className="mb-4">
+              <ProgressChart workouts={workouts} />
             </div>
-          </div>
-          <div className="col-md-4">
-            <div className="card bg-info text-white">
-              <div className="card-body">
-                <h5 className="card-title">Avg. Duration (min)</h5>
-                <h2 className="display-4">{stats.avgDuration}</h2>
+            
+            {/* Add Workout Form + Workout List */}
+            <div className="row g-4">
+              <div className="col-lg-4">
+                <div className="card h-100">
+                  <div className="card-header">
+                    <h5 className="mb-0">Add New Workout</h5>
+                  </div>
+                  <div className="card-body">
+                    <WorkoutForm onSubmit={addWorkout} />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Progress Chart */}
-        <ProgressChart workouts={workouts} />
-        
-        {/* Add Workout Form */}
-        <div className="row mt-4">
-          <div className="col-md-4">
-            <div className="card">
-              <div className="card-header">
-                <h5>Add New Workout</h5>
-              </div>
-              <div className="card-body">
-                <WorkoutForm onSubmit={addWorkout} />
-              </div>
-            </div>
-          </div>
-          
-          {/* Workout List */}
-          <div className="col-md-8">
-            <div className="card">
-              <div className="card-header">
-                <h5>My Workouts</h5>
-              </div>
-              <div className="card-body">
-                <WorkoutList 
-                  workouts={workouts}
-                  onUpdate={updateWorkout}
-                  onDelete={deleteWorkout}
-                />
+              
+              <div className="col-lg-8">
+                <div className="card h-100">
+                  <div className="card-header">
+                    <h5 className="mb-0">My Workouts</h5>
+                  </div>
+                  <div className="card-body">
+                    <WorkoutList 
+                      workouts={workouts}
+                      onUpdate={updateWorkout}
+                      onDelete={deleteWorkout}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -1,107 +1,143 @@
 import React, { useState } from 'react';
 
-const WorkoutForm = ({ onSubmit, initialData = null }) => {
-  const [title, setTitle] = useState(initialData?.title || '');
-  const [type, setType] = useState(initialData?.type || 'cardio');
-  const [duration, setDuration] = useState(initialData?.duration || '');
-  const [calories, setCalories] = useState(initialData?.calories || '');
-  const [notes, setNotes] = useState(initialData?.notes || '');
-  const [loading, setLoading] = useState(false);
+const WorkoutForm = ({ onSubmit }) => {
+  const [formData, setFormData] = useState({
+    title: '', // Changed from 'exercise' to 'title'
+    type: 'cardio', // Added 'type' field
+    duration: '',
+    calories: '',
+    date: new Date().toISOString().split('T')[0],
+    notes: ''
+  });
 
-  const handleSubmit = async (e) => {
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
+    if (!formData.title || !formData.duration) return;
     
-    try {
-      await onSubmit({
-        title,
-        type,
-        duration: parseInt(duration),
-        calories: parseInt(calories),
-        notes
-      });
-      
-      // Reset form if no initial data
-      if (!initialData) {
-        setTitle('');
-        setType('cardio');
-        setDuration('');
-        setCalories('');
-        setNotes('');
-      }
-    } finally {
-      setLoading(false);
-    }
+    onSubmit({
+      title: formData.title, // Changed from 'exercise'
+      type: formData.type, // Added 'type'
+      duration: Number(formData.duration),
+      calories: Number(formData.calories) || 0,
+      date: formData.date,
+      notes: formData.notes
+    });
+
+    // Reset form
+    setFormData({
+      title: '',
+      type: 'cardio',
+      duration: '',
+      calories: '',
+      date: new Date().toISOString().split('T')[0],
+      notes: ''
+    });
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-3">
-        <label className="form-label">Workout Title</label>
+        <label className="form-label">
+          <i className="bi bi-dumbbell me-2"></i>Exercise Name
+        </label>
         <input
           type="text"
           className="form-control"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name="title" // Changed from 'exercise'
+          value={formData.title} // Changed from 'exercise'
+          onChange={handleChange}
+          placeholder="e.g. Bench Press"
           required
-          placeholder="e.g., Morning Run"
         />
       </div>
-      
+
+      {/* Added Workout Type Dropdown */}
       <div className="mb-3">
-        <label className="form-label">Type</label>
+        <label className="form-label">
+          <i className="bi bi-tag me-2"></i>Workout Type
+        </label>
         <select
           className="form-select"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
+          name="type"
+          value={formData.type}
+          onChange={handleChange}
           required
         >
           <option value="cardio">Cardio</option>
           <option value="strength">Strength</option>
           <option value="flexibility">Flexibility</option>
+          <option value="swimming">Swimming</option>
+          <option value="cycling">Cycling</option>
+          <option value="walking">Walking</option>
         </select>
       </div>
-      
+
+      <div className="row">
+        <div className="col-6 mb-3">
+          <label className="form-label">
+            <i className="bi bi-clock me-2"></i>Duration (min)
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+            placeholder="45"
+            required
+          />
+        </div>
+        <div className="col-6 mb-3">
+          <label className="form-label">
+            <i className="bi bi-fire me-2"></i>Calories Burned
+          </label>
+          <input
+            type="number"
+            className="form-control"
+            name="calories"
+            value={formData.calories}
+            onChange={handleChange}
+            placeholder="320"
+          />
+        </div>
+      </div>
+
       <div className="mb-3">
-        <label className="form-label">Duration (minutes)</label>
+        <label className="form-label">
+          <i className="bi bi-calendar-date me-2"></i>Date
+        </label>
         <input
-          type="number"
+          type="date"
           className="form-control"
-          value={duration}
-          onChange={(e) => setDuration(e.target.value)}
-          required
-          min="1"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
         />
       </div>
-      
+
       <div className="mb-3">
-        <label className="form-label">Calories Burned</label>
-        <input
-          type="number"
-          className="form-control"
-          value={calories}
-          onChange={(e) => setCalories(e.target.value)}
-          required
-          min="0"
-        />
-      </div>
-      
-      <div className="mb-3">
-        <label className="form-label">Notes (optional)</label>
+        <label className="form-label">
+          <i className="bi bi-journal-text me-2"></i>Notes
+        </label>
         <textarea
           className="form-control"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
+          name="notes"
+          value={formData.notes}
+          onChange={handleChange}
           rows="2"
+          placeholder="Felt strong today..."
         />
       </div>
-      
-      <button 
-        type="submit" 
-        className="btn btn-primary w-100"
-        disabled={loading}
-      >
-        {loading ? 'Saving...' : initialData ? 'Update Workout' : 'Add Workout'}
+
+      <button type="submit" className="btn btn-success w-100">
+        <i className="bi bi-plus-circle me-2"></i>Add Workout
       </button>
     </form>
   );

@@ -1,8 +1,7 @@
-// frontend/src/pages/Admin/AdminLogin.jsx
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import API from '../../services/api';
 import { AdminContext } from '../../context/AdminContext';
 
 const AdminLogin = () => {
@@ -19,7 +18,7 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/admin/login', { 
+      const response = await API.post('/admin/login', { 
         email, 
         password 
       });
