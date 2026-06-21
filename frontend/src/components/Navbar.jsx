@@ -27,7 +27,6 @@ const Navbar = () => {
       }}
     >
       <div className="container">
-
         {/* Logo */}
         <Link
           className="navbar-brand d-flex align-items-center fw-bold fs-3 text-white"
@@ -56,27 +55,44 @@ const Navbar = () => {
               <Link
                 className="nav-link text-light fw-semibold"
                 to="/dashboard"
-                style={{
-                  transition: "0.3s",
-                }}
               >
                 <FaHome className="me-2 text-info" />
                 Dashboard
               </Link>
             </li>
 
-            {/* User */}
+            {/* Profile */}
+            <li className="nav-item mx-3">
+              <Link
+                className="nav-link text-light fw-semibold"
+                to="/profile"
+              >
+                <FaUserCircle className="me-2 text-warning" />
+                Profile
+              </Link>
+            </li>
+
+            {/* User Profile Picture + Name */}
             <li className="nav-item mx-3">
               <div
-                className="px-3 py-2 rounded-pill"
+                className="d-flex align-items-center px-3 py-2 rounded-pill"
                 style={{
                   background: "rgba(255,255,255,0.1)",
                   border: "1px solid rgba(255,255,255,0.1)",
                   color: "white",
                 }}
               >
-                <FaUserCircle className="me-2 text-warning fs-5" />
-                {user?.name}
+                {user?.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt="Profile"
+                    className="rounded-circle me-2"
+                    style={{ width: '32px', height: '32px', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <FaUserCircle className="me-2 text-warning fs-5" />
+                )}
+                <span>{user?.name}</span>
               </div>
             </li>
 
@@ -86,12 +102,10 @@ const Navbar = () => {
                 onClick={handleLogout}
                 className="btn rounded-pill px-4 fw-bold"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #f59e0b, #ef4444)",
+                  background: "linear-gradient(135deg, #f59e0b, #ef4444)",
                   color: "white",
                   border: "none",
                   boxShadow: "0px 5px 15px rgba(239,68,68,0.4)",
-                  transition: "0.3s",
                 }}
               >
                 <FaSignOutAlt className="me-2" />

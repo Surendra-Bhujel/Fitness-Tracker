@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // Sync axios header whenever token changes
+  // Sync axios header
   useEffect(() => {
     if (token) {
       API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -43,6 +43,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
+  // New: Update user (for avatar, name, etc.)
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  };
+
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -52,7 +58,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      token, 
+      login, 
+      logout, 
+      updateUser,   // ← Added
+      loading 
+    }}>
       {children}
     </AuthContext.Provider>
   );

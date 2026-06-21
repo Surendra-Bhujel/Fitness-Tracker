@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    avatar: {
+        type: String,
+        default: null
+    },
 }, {
     timestamps: true     // automatically add created at and updated at 
 });

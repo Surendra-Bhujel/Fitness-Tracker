@@ -1,7 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const path = require("path");         
 require("dotenv").config();
+
 
 
 const app = express();
@@ -14,6 +16,9 @@ app.use(express.json()); // to parse JSON body
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/workouts', require('./routes/workout'));
 app.use('/api/admin', require('./routes/admin'));
+
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // DB CONNECTION 
 const connectDB = async () => {
