@@ -10,11 +10,13 @@ const workoutSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     type: {
         type: String,
-        enum: ['cardio', 'strength', 'flexibility']
+        enum: ['cardio', 'strength', 'flexibility', 'cycling', 'walking'],
+        default: 'cardio'
     },
     duration: {
         type: Number, // in minutes
@@ -23,7 +25,8 @@ const workoutSchema = new mongoose.Schema({
     },
     calories: {
         type: Number,
-        required: true,  
+        required: false,  
+        default: 0,
         min: 0
     },
     date: {
@@ -31,7 +34,8 @@ const workoutSchema = new mongoose.Schema({
         default: Date.now
     },
     notes: {
-        type: String
+        type: String,
+        trim: true
     }
 }, {
     timestamps: true

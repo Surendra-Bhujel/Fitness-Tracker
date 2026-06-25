@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import AdminLogin from './pages/Admin/AdminLogin';
 import AdminDashboard from './pages/Admin/AdminDashboard';
+import AdminSettings from './pages/Admin/AdminSettings';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
@@ -29,7 +30,9 @@ function App() {
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/AdminSettings" element={<AdminSettings/>}/>
 
+          
           <Route
             path="/admin/dashboard"
             element={
@@ -59,6 +62,7 @@ function App() {
             }
           />
         </Routes>
+        
       </Router>
     </AuthProvider>
   );

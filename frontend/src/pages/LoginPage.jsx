@@ -1,16 +1,15 @@
-import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { motion } from "framer-motion";
-import { AuthContext } from "../context/AuthContext";
-import { FaEye, FaEyeSlash, FaDumbbell } from "react-icons/fa";
-import API from "../services/api";
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { AuthContext } from '../context/AuthContext';
+import { FaEye, FaEyeSlash, FaDumbbell } from 'react-icons/fa';
+import API from '../services/api';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const { login } = useContext(AuthContext);
@@ -18,146 +17,218 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
-
     try {
-      const response = await API.post("/auth/login", {
-        email,
-        password,
-      });
-
+      const response = await API.post('/auth/login', { email, password });
       login(response.data.user, response.data.token);
-      navigate("/dashboard");
+      navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || "Invalid credentials");
+      setError(err.response?.data?.message || 'Invalid credentials');
     } finally {
       setLoading(false);
     }
   };
 
+  const inputStyle = {
+    width: '100%',
+    background: 'rgba(255,255,255,0.05)',
+    border: '0.5px solid rgba(255,255,255,0.1)',
+    borderRadius: 10,
+    padding: '11px 14px',
+    fontSize: 14,
+    color: 'white',
+    outline: 'none',
+    transition: 'border-color .2s',
+  };
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: 11,
+    fontWeight: 700,
+    color: 'rgba(255,255,255,0.5)',
+    letterSpacing: '.05em',
+    textTransform: 'uppercase',
+    marginBottom: 6,
+  };
+
   return (
     <div
-      className="min-vh-100 d-flex align-items-center justify-content-center"
       style={{
-        background: "linear-gradient(135deg, #0f172a 0%, #1e2937 100%)",
-        color: "white",
+        minHeight: '100vh',
+        background: '#0f172a',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem',
       }}
     >
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-10">
-            <div className="row align-items-center g-0 shadow-2xl rounded-4 overflow-hidden">
-              {/* Left Side - Visual */}
-              <div
-                className="col-lg-6 d-none d-lg-block p-5"
-                style={{
-                  background: "linear-gradient(135deg, #14b8a6, #0ea5e9)",
-                }}
-              >
-                <div className="h-100 d-flex flex-column justify-content-center text-center text-dark">
-                  <motion.div
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.8, type: "spring" }}
-                  >
-                    <FaDumbbell size={120} className="mb-4" />
-                  </motion.div>
-                  <h2 className="display-5 fw-bold">Welcome Back</h2>
-                  <p className="lead">Continue your fitness journey</p>
-                </div>
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        style={{
+          width: '100%',
+          maxWidth: 900,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          borderRadius: 20,
+          overflow: 'hidden',
+          border: '0.5px solid rgba(255,255,255,0.08)',
+        }}
+      >
+        {/* ── LEFT PANEL ── */}
+        <div
+          style={{
+            position: 'relative',
+            background: '#0c1628',
+            padding: '3rem 2.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
+            overflow: 'hidden',
+          }}
+          className="d-none d-lg-flex"
+        >
+          {/* Grid */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)',
+            backgroundSize: '40px 40px', pointerEvents: 'none',
+          }} />
+          {/* Orbs */}
+          <div style={{ position: 'absolute', width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle,rgba(20,184,166,0.2) 0%,transparent 70%)', top: -60, right: -60, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', width: 220, height: 220, borderRadius: '50%', background: 'radial-gradient(circle,rgba(99,102,241,0.18) 0%,transparent 70%)', bottom: -40, left: -40, pointerEvents: 'none' }} />
+
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            {/* Brand */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center', marginBottom: '2.5rem' }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#14b8a6,#6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <FaDumbbell size={17} color="white" />
               </div>
-
-              {/* Right Side - Form */}
-              <div className="col-lg-6 bg-dark p-5">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <div className="text-center mb-5">
-                    <h2 className="fw-bold text-teal">Fitness Tracker</h2>
-                    <h4 className="text-light">Sign In</h4>
-                  </div>
-
-                  {error && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="alert alert-danger"
-                    >
-                      {error}
-                    </motion.div>
-                  )}
-
-                  <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                      <label className="form-label text-light">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        className="form-control form-control-lg bg-dark text-white border-secondary"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        placeholder="you@example.com"
-                      />
-                    </div>
-
-                    <div className="mb-4 position-relative">
-                      <label className="form-label text-light">Password</label>
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        className="form-control form-control-lg bg-dark text-white border-secondary pe-5"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                      />
-                      <span
-                        className="position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-                        style={{ cursor: "pointer", marginTop: "8px" }}
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <FaEyeSlash size={20} />
-                        ) : (
-                          <FaEye size={20} />
-                        )}
-                      </span>
-                    </div>
-
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      type="submit"
-                      className="btn btn-lg w-100 mt-3"
-                      style={{
-                        background: "linear-gradient(90deg, #14b8a6, #22d3ee)",
-                        color: "#0f172a",
-                        fontWeight: 600,
-                      }}
-                      disabled={loading}
-                    >
-                      {loading ? "Signing In..." : "Sign In"}
-                    </motion.button>
-                  </form>
-
-                  <p className="text-center mt-4 text-light">
-                    Don't have an account?{" "}
-                    <Link
-                      to="/register"
-                      className="text-teal text-decoration-none fw-medium"
-                    >
-                      Create one free
-                    </Link>
-                  </p>
-                </motion.div>
-              </div>
+              <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>FitForge</span>
             </div>
+
+            {/* Icon ring */}
+            <motion.div
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              style={{
+                width: 80, height: 80, borderRadius: '50%',
+                background: 'rgba(20,184,166,0.12)',
+                border: '0.5px solid rgba(20,184,166,0.3)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 1.5rem',
+              }}
+            >
+              <FaDumbbell size={32} color="#14b8a6" />
+            </motion.div>
+
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '.5rem' }}>Welcome back</h2>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, maxWidth: 220, margin: '0 auto 2rem' }}>
+              Continue your fitness journey where you left off
+            </p>
+
+            {/* Feature list */}
+            {['Track every workout', 'AI-powered insights', 'Real-time progress'].map((f, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, textAlign: 'left' }}>
+                <div style={{ width: 24, height: 24, borderRadius: 7, background: 'rgba(20,184,166,0.2)', border: '0.5px solid rgba(20,184,166,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ color: '#14b8a6', fontSize: 11, fontWeight: 700 }}>✓</span>
+                </div>
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>{f}</span>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+
+        {/* ── RIGHT PANEL ── */}
+        <div style={{ background: '#111827', padding: '3rem 2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ marginBottom: '1.75rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '.3rem' }}>Sign in</h2>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)' }}>Enter your credentials to continue</p>
+          </div>
+
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{ background: 'rgba(239,68,68,0.1)', border: '0.5px solid rgba(239,68,68,0.3)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: '#fca5a5', marginBottom: '1.25rem' }}
+            >
+              {error}
+            </motion.div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            {/* Email */}
+            <div style={{ marginBottom: '1.25rem' }}>
+              <label style={labelStyle}>Email address</label>
+              <input
+                type="email"
+                style={inputStyle}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+                onFocus={(e) => e.target.style.borderColor = 'rgba(20,184,166,0.5)'}
+                onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+              />
+            </div>
+
+            {/* Password */}
+            <div style={{ marginBottom: '.75rem' }}>
+              <label style={labelStyle}>Password</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  style={{ ...inputStyle, paddingRight: 44 }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  onFocus={(e) => e.target.style.borderColor = 'rgba(20,184,166,0.5)'}
+                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', padding: 0 }}
+                >
+                  {showPassword ? <FaEyeSlash size={17} /> : <FaEye size={17} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Forgot */}
+            <div style={{ textAlign: 'right', marginBottom: '1.5rem' }}>
+              <a href="#" style={{ fontSize: 12, color: '#14b8a6', textDecoration: 'none' }}>Forgot password?</a>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%', padding: '12px', borderRadius: 10, border: 'none',
+                background: 'linear-gradient(90deg,#14b8a6,#6366f1)',
+                color: 'white', fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.7 : 1,
+              }}
+            >
+              {loading ? 'Signing in…' : 'Sign in →'}
+            </motion.button>
+          </form>
+
+          <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
+            Don't have an account?{' '}
+            <Link to="/register" style={{ color: '#14b8a6', textDecoration: 'none', fontWeight: 600 }}>
+              Create one free
+            </Link>
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 };

@@ -8,7 +8,7 @@ export const AdminProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
+    const token = localStorage.getItem('token');
     const adminData = localStorage.getItem('admin');
 
     if (token && adminData) {
@@ -27,14 +27,14 @@ export const AdminProvider = ({ children }) => {
 
   const login = (adminData, token) => {
     setAdmin(adminData);
-    localStorage.setItem('adminToken', token);
+    localStorage.setItem('token', token);
     localStorage.setItem('admin', JSON.stringify(adminData));
     API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   };
 
   const logout = () => {
     setAdmin(null);
-    localStorage.removeItem('adminToken');
+    localStorage.removeItem('token');
     localStorage.removeItem('admin');
     delete API.defaults.headers.common['Authorization'];
   };
