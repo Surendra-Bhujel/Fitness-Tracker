@@ -192,7 +192,7 @@ const RegisterPage = () => {
             {/* Full name */}
             <div style={{ marginBottom: '1rem' }}>
               <label style={labelStyle}>Full name</label>
-              <input type="text" style={inputStyle} value={name} onChange={(e) => setName(e.target.value)} placeholder="John Doe" required onFocus={handleFocus} onBlur={handleBlur} />
+              <input type="text" style={inputStyle} value={name} onChange={(e) => setName(e.target.value)} placeholder="Full Name" required onFocus={handleFocus} onBlur={handleBlur} />
             </div>
 
             {/* Email */}
