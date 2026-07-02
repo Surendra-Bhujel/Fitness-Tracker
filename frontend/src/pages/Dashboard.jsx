@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import WorkoutForm from '../components/WorkoutForm';
 import WorkoutList from '../components/WorkoutList';
@@ -139,6 +140,7 @@ function StatCard({ title, value, unit, icon: Icon, accent, dark }) {
 /* ─── Main component ─────────────────────────────────────────────── */
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate(); // ✅ ADDED for navigation
 
   const [workouts,     setWorkouts]     = useState([]);
   const [loading,      setLoading]      = useState(true);
@@ -274,6 +276,12 @@ const Dashboard = () => {
     }
   };
 
+  /* ── Logout Handler ── */
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
       <div className="spinner-border text-primary" role="status" style={{ width: '2.5rem', height: '2.5rem' }} />
@@ -333,13 +341,13 @@ const Dashboard = () => {
           ))}
         </nav>
 
-        {/* Footer */}
+        {/* ── Footer ── */}
         <div style={{ padding: '12px 10px', borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
           <button style={sx.footerBtn()} onClick={toggleDark}>
             {darkMode ? <FaSun size={14} /> : <FaMoon size={14} />}
             <span>{darkMode ? 'Light mode' : 'Dark mode'}</span>
           </button>
-          <button style={sx.footerBtn(true)} onClick={logout}>
+          <button style={sx.footerBtn(true)} onClick={handleLogout}>
             <FaSignOutAlt size={14} />
             <span>Logout</span>
           </button>

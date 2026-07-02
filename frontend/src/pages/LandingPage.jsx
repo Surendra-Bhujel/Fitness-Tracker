@@ -71,6 +71,12 @@ const LandingPage = () => {
     }
   ];
 
+  const ctaStats = [
+    { icon: <FaTrophy size={12} />, text: '98,000+ athletes', color: '#fbbf24' },
+    { icon: <FaStar size={12} />, text: '4.9 average rating', color: '#f472b6' },
+    { icon: <FaBolt size={12} />, text: 'Free forever plan', color: '#14b8a6' }
+  ];
+
   return (
     <div style={{ background: '#0f172a', color: 'white', fontFamily: 'system-ui, sans-serif', overflowX: 'hidden' }}>
 
@@ -491,48 +497,170 @@ const LandingPage = () => {
 
       {/* ── FINAL CTA ── */}
       <motion.div
-        className="text-center position-relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%)', borderTop: '0.5px solid rgba(255,255,255,0.06)', padding: '5rem 1rem' }}
+        className="position-relative overflow-hidden"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 0%, #1e1b4b 0%, #0f172a 60%)',
+          borderTop: '0.5px solid rgba(255,255,255,0.06)',
+          padding: '6rem 1rem'
+        }}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
       >
-        {/* CTA orb */}
-        <div style={{ position: 'absolute', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle,rgba(99,102,241,0.2) 0%,transparent 70%)', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', pointerEvents: 'none' }} />
+        {/* Grid bg, echoes hero */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)',
+          backgroundSize: '50px 50px',
+          maskImage: 'radial-gradient(ellipse at 50% 40%, black 0%, transparent 75%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 50% 40%, black 0%, transparent 75%)',
+          pointerEvents: 'none'
+        }} />
 
-        <div className="position-relative" style={{ zIndex: 2 }}>
+        {/* Ambient orbs */}
+        <motion.div
+          animate={{ opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 5, repeat: Infinity }}
+          style={{ position: 'absolute', width: 480, height: 480, borderRadius: '50%', background: 'radial-gradient(circle,rgba(99,102,241,0.28) 0%,transparent 70%)', top: '-20%', left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none' }}
+        />
+        <div style={{ position: 'absolute', width: 320, height: 320, borderRadius: '50%', background: 'radial-gradient(circle,rgba(20,184,166,0.22) 0%,transparent 70%)', bottom: -60, right: '8%', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle,rgba(244,114,182,0.15) 0%,transparent 70%)', bottom: 0, left: '6%', pointerEvents: 'none' }} />
+
+        <div className="container position-relative text-center" style={{ zIndex: 2, maxWidth: 640 }}>
+
+          {/* Eyebrow badge, matches hero's language */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="d-inline-flex align-items-center gap-2 mb-4 px-3 py-2"
+            style={{ borderRadius: 100, background: 'rgba(20,184,166,0.15)', border: '0.5px solid rgba(20,184,166,0.4)', fontSize: 13, color: '#5eead4' }}
+          >
+            <motion.div
+              animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
+              transition={{ duration: 1.6, repeat: Infinity }}
+              style={{ width: 6, height: 6, borderRadius: '50%', background: '#14b8a6' }}
+            />
+            Your next PR is closer than you think
+          </motion.div>
+
           <motion.h2
-            style={{ fontSize: '2.5rem', fontWeight: 700, letterSpacing: '-0.02em', marginBottom: '.75rem' }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            style={{ fontSize: '3rem', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.12, marginBottom: '1rem' }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            Ready to Transform<br />Your Training?
+            Ready to Transform<br />
+            <span style={{ background: 'linear-gradient(90deg,#14b8a6,#6366f1,#f472b6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundSize: '200% 100%' }}>
+              Your Training?
+            </span>
           </motion.h2>
-          <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '2rem' }}>
-            Join 98,000+ athletes already tracking smarter with FitForge.
-          </p>
-          <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-            <Link
-              to="/register"
-              className="btn btn-lg d-inline-flex align-items-center gap-2 fw-bold"
-              style={{ background: 'white', color: '#0f172a', borderRadius: 12, padding: '14px 36px', fontSize: 15 }}
-            >
-              Get Started Free <FaArrowRight size={14} />
-            </Link>
+
+          <motion.p
+            style={{ color: 'rgba(255,255,255,0.55)', fontSize: '1.05rem', lineHeight: 1.7, marginBottom: '2.25rem' }}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+          >
+            Join 98,000+ athletes already tracking smarter, recovering faster,
+            and hitting goals they used to just hope for.
+          </motion.p>
+
+          {/* CTA buttons */}
+          <motion.div
+            className="d-flex flex-wrap justify-content-center gap-3 mb-4"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+              <Link
+                to="/register"
+                className="btn btn-lg d-inline-flex align-items-center gap-2 fw-bold"
+                style={{
+                  background: 'linear-gradient(90deg,#14b8a6,#6366f1)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: 12,
+                  padding: '15px 38px',
+                  fontSize: 15,
+                  boxShadow: '0 10px 30px -8px rgba(20,184,166,0.5)'
+                }}
+              >
+                Get Started Free <FaArrowRight size={14} />
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+              <a
+                href="#features"
+                className="btn btn-lg fw-semibold d-inline-flex align-items-center"
+                style={{ background: 'rgba(255,255,255,0.06)', color: 'white', border: '0.5px solid rgba(255,255,255,0.18)', borderRadius: 12, padding: '15px 30px', fontSize: 15 }}
+              >
+                See How It Works
+              </a>
+            </motion.div>
           </motion.div>
-          <p style={{ marginTop: '1rem', fontSize: 13, color: 'rgba(255,255,255,0.35)' }}>
-            No credit card required · Free forever plan available
+
+          {/* Quick trust stats */}
+          <motion.div
+            className="d-flex flex-wrap justify-content-center gap-3 gap-md-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            {ctaStats.map((s, i) => (
+              <div key={i} className="d-flex align-items-center gap-2" style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)' }}>
+                <span style={{ color: s.color }}>{s.icon}</span>
+                {s.text}
+              </div>
+            ))}
+          </motion.div>
+
+          <p style={{ marginTop: '1.75rem', fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>
+            No credit card required · Cancel anytime
           </p>
         </div>
       </motion.div>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background: '#080e1a', borderTop: '0.5px solid rgba(255,255,255,0.06)', paddingTop: '3rem', paddingBottom: '2rem' }}>
-        {/* Accent bar */}
-        <div style={{ height: 3, background: 'linear-gradient(90deg,#14b8a6,#6366f1,#14b8a6)', marginBottom: '2.5rem' }} />
-
+      <footer style={{ background: '#0f172a', borderTop: '0.5px solid rgba(255,255,255,0.06)', paddingTop: '3.5rem', paddingBottom: '2rem' }}>
         <div className="container">
+
+          {/* Newsletter strip */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-4 mb-5 p-4"
+            style={{ background: 'rgba(255,255,255,0.03)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 16 }}
+          >
+            <div>
+              <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>Get training tips in your inbox</div>
+              <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>One email a week. No spam, unsubscribe anytime.</div>
+            </div>
+            <form className="d-flex gap-2 w-100" style={{ maxWidth: 380 }} onSubmit={e => e.preventDefault()}>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                required
+                style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(255,255,255,0.15)', borderRadius: 9, padding: '11px 14px', color: 'white', fontSize: 13, outline: 'none' }}
+                onFocus={e => e.currentTarget.style.borderColor = 'rgba(20,184,166,0.6)'}
+                onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'}
+              />
+              <button
+                type="submit"
+                className="fw-semibold"
+                style={{ background: 'linear-gradient(90deg,#14b8a6,#6366f1)', color: 'white', border: 'none', borderRadius: 9, padding: '11px 20px', fontSize: 13, whiteSpace: 'nowrap' }}
+              >
+                Subscribe
+              </button>
+            </form>
+          </motion.div>
+
           <div className="row gy-5">
 
             {/* Brand */}
@@ -543,9 +671,17 @@ const LandingPage = () => {
                 </div>
                 <span style={{ fontWeight: 700, fontSize: 17 }}>FitForge</span>
               </div>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6, maxWidth: 280 }}>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6, maxWidth: 280, marginBottom: 16 }}>
                 Smart workout tracking with real-time insights and progress you can actually see.
               </p>
+              <div className="d-flex align-items-center gap-2" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
+                <motion.div
+                  animate={{ opacity: [1, 0.3, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80' }}
+                />
+                All systems operational
+              </div>
             </div>
 
             {/* Link columns */}
@@ -555,21 +691,31 @@ const LandingPage = () => {
                   {col.title}
                 </h6>
                 <ul className="list-unstyled mb-0">
-                  {col.links.map((link, i) => (
-                    <li key={i} className="mb-2">
-                      {link === 'Admin Portal' ? (
-                        <Link to="/admin/login" style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>{link}</Link>
-                      ) : (
-                        <a href="#" style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>{link}</a>
-                      )}
-                    </li>
-                  ))}
+                  {col.links.map((link, i) => {
+                    const linkStyle = {
+                      fontSize: 13,
+                      color: 'rgba(255,255,255,0.45)',
+                      textDecoration: 'none',
+                      transition: 'color .15s, padding-left .15s'
+                    };
+                    const onEnter = e => { e.currentTarget.style.color = 'white'; e.currentTarget.style.paddingLeft = '4px'; };
+                    const onLeave = e => { e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; e.currentTarget.style.paddingLeft = '0px'; };
+                    return (
+                      <li key={i} className="mb-2">
+                        {link === 'Admin Portal' ? (
+                          <Link to="/admin/login" style={linkStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>{link}</Link>
+                        ) : (
+                          <a href="#" style={linkStyle} onMouseEnter={onEnter} onMouseLeave={onLeave}>{link}</a>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
           </div>
 
-          <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '2rem 0' }} />
+          <hr style={{ borderColor: 'rgba(255,255,255,0.08)', margin: '2.5rem 0 1.5rem' }} />
 
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
             <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)' }}>© 2026 FitForge — All rights reserved.</div>
@@ -580,16 +726,17 @@ const LandingPage = () => {
                 { Icon: FaInstagram, label: 'Instagram' },
                 { Icon: FaLinkedinIn, label: 'LinkedIn' }
               ].map(({ Icon, label }, i) => (
-                <a
+                <motion.a
                   key={i}
                   href="#"
                   aria-label={label}
-                  style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(255,255,255,0.06)', border: '0.5px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(20,184,166,0.25)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+                  whileHover={{ y: -3 }}
+                  style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(255,255,255,0.06)', border: '0.5px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s, border-color .2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(20,184,166,0.25)'; e.currentTarget.style.borderColor = 'rgba(20,184,166,0.5)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
                 >
                   <Icon size={13} color="rgba(255,255,255,0.6)" />
-                </a>
+                </motion.a>
               ))}
             </div>
           </div>
