@@ -13,10 +13,21 @@ import {
   FaCheckCircle, FaTrash, FaFlag
 } from 'react-icons/fa';
 
-/* ─── Design tokens ────────────────────────────────────────────── */
-const SIDEBAR_BG   = '#0f172a';
-const ACCENT       = '#6366f1';
-const ACCENT_HOVER = '#4f46e5';
+/* ─── Design tokens — same system as LandingPage / LoginPage.
+   Pull these into a shared theme.js and import everywhere;
+   copy-pasted three times now, that's worth fixing before a fourth file. ── */
+const SIDEBAR_BG = '#17181a';
+const YELLOW      = '#f5c400';
+const RED          = '#c1272d';
+const GREEN        = '#5c7a4f';   // muted moss — used only for "done" states, not a brand color
+const PAPER        = '#ece7da';
+const PAPER_CARD    = '#f5f1e6';
+const DARK_CARD     = '#1e1f21';
+const LINE_LIGHT    = 'rgba(23,24,26,0.12)';
+const LINE_DARK      = 'rgba(236,231,218,0.14)';
+
+const DISPLAY = "'Anton', sans-serif";
+const MONO    = "'JetBrains Mono', monospace";
 
 /* ─── Sidebar item config ───────────────────────────────────────── */
 const NAV_ITEMS = [
@@ -47,11 +58,10 @@ const sx = {
     width: '100%',
     padding: '9px 14px',
     border: 'none',
-    borderRadius: 8,
-    background: active ? ACCENT : 'transparent',
-    color: active ? '#fff' : 'rgba(255,255,255,0.5)',
+    background: active ? YELLOW : 'transparent',
+    color: active ? '#17181a' : 'rgba(236,231,218,0.5)',
     fontSize: 13,
-    fontWeight: active ? 500 : 400,
+    fontWeight: active ? 700 : 400,
     cursor: 'pointer',
     marginBottom: 2,
     transition: 'background 0.15s, color 0.15s',
@@ -64,31 +74,29 @@ const sx = {
     width: '100%',
     padding: '9px 14px',
     border: 'none',
-    borderRadius: 8,
     background: 'transparent',
-    color: danger ? '#f87171' : 'rgba(255,255,255,0.5)',
+    color: danger ? RED : 'rgba(236,231,218,0.5)',
     fontSize: 13,
     cursor: 'pointer',
     marginBottom: 2,
     textAlign: 'left',
   }),
   statCard: (dark) => ({
-    background: dark ? '#1e293b' : '#fff',
-    border: `0.5px solid ${dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
-    borderRadius: 12,
+    background: dark ? DARK_CARD : PAPER_CARD,
+    border: `1px solid ${dark ? LINE_DARK : LINE_LIGHT}`,
     padding: '18px 20px',
   }),
   card: (dark) => ({
-    background: dark ? '#1e293b' : '#fff',
-    border: `0.5px solid ${dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
-    borderRadius: 12,
+    background: dark ? DARK_CARD : PAPER_CARD,
+    border: `1px solid ${dark ? LINE_DARK : LINE_LIGHT}`,
     overflow: 'hidden',
   }),
   cardHeader: (dark) => ({
     padding: '14px 20px',
-    borderBottom: `0.5px solid ${dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
-    fontSize: 14,
-    fontWeight: 500,
+    borderBottom: `1px solid ${dark ? LINE_DARK : LINE_LIGHT}`,
+    fontSize: 13,
+    fontWeight: 600,
+    letterSpacing: '0.02em',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -96,40 +104,30 @@ const sx = {
   input: (dark) => ({
     width: '100%',
     padding: '8px 12px',
-    borderRadius: 6,
     fontSize: 13,
-    border: `0.5px solid ${dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)'}`,
-    background: dark ? '#1e293b' : '#fff',
-    color: dark ? '#f1f5f9' : '#0f172a',
+    fontFamily: MONO,
+    border: `1px solid ${dark ? LINE_DARK : LINE_LIGHT}`,
+    background: 'transparent',
+    color: dark ? '#ece7da' : '#17181a',
     marginTop: 4,
     marginBottom: 12,
     outline: 'none',
   })
 };
 
-const STAT_COLORS = {
-  indigo: { bg: '#eef2ff', color: '#6366f1', darkBg: '#312e81' },
-  emerald: { bg: '#ecfdf5', color: '#10b981', darkBg: '#064e3b' },
-  sky:     { bg: '#e0f2fe', color: '#0ea5e9', darkBg: '#0c4a6e' },
-};
-
-function StatCard({ title, value, unit, icon: Icon, accent, dark }) {
-  const c = STAT_COLORS[accent];
+/* Left accent bar alternates yellow/red instead of a rainbow of icon colors */
+function StatCard({ title, value, unit, icon: Icon, accentColor, dark }) {
   return (
-    <div style={sx.statCard(dark)}>
-      <div style={{
-        width: 36, height: 36, borderRadius: 8, marginBottom: 12,
-        background: dark ? c.darkBg : c.bg,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-      }}>
-        <Icon size={18} color={c.color} />
+    <div style={{ ...sx.statCard(dark), borderLeft: `3px solid ${accentColor}`, position: 'relative' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+        <Icon size={13} color={dark ? 'rgba(236,231,218,0.4)' : 'rgba(23,24,26,0.4)'} />
+        <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', color: dark ? 'rgba(236,231,218,0.45)' : 'rgba(23,24,26,0.5)', margin: 0 }}>
+          {title}
+        </p>
       </div>
-      <p style={{ fontSize: 12, color: dark ? 'rgba(255,255,255,0.45)' : '#6b7280', marginBottom: 4 }}>
-        {title}
-      </p>
-      <p style={{ fontSize: 26, fontWeight: 500, lineHeight: 1 }}>{value}</p>
+      <p style={{ fontFamily: MONO, fontSize: 28, fontWeight: 700, lineHeight: 1, margin: 0 }}>{value}</p>
       {unit && (
-        <p style={{ fontSize: 12, color: dark ? 'rgba(255,255,255,0.45)' : '#6b7280', marginTop: 3 }}>
+        <p style={{ fontSize: 12, color: dark ? 'rgba(236,231,218,0.45)' : 'rgba(23,24,26,0.5)', marginTop: 4, marginBottom: 0 }}>
           {unit}
         </p>
       )}
@@ -183,7 +181,7 @@ const Dashboard = () => {
     if (user) {
       const storedAvatar = localStorage.getItem(`avatar_${user.email}`) || user.avatar || '';
       const storedName = localStorage.getItem(`name_${user.email}`) || user.name || '';
-      
+
       setProfileForm({
         name: storedName,
         email: user.email || '',
@@ -283,45 +281,50 @@ const Dashboard = () => {
   };
 
   if (loading) return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-      <div className="spinner-border text-primary" role="status" style={{ width: '2.5rem', height: '2.5rem' }} />
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: darkMode ? '#17181a' : '#ece7da' }}>
+      <div className="spinner-border" role="status" style={{ width: '2.5rem', height: '2.5rem', color: YELLOW }} />
     </div>
   );
 
-  const textPrimary   = darkMode ? '#f1f5f9' : '#0f172a';
-  const textSecondary = darkMode ? 'rgba(255,255,255,0.45)' : '#6b7280';
-  const pageBg        = darkMode ? '#0f172a' : '#f8fafc';
+  const textPrimary   = darkMode ? '#ece7da' : '#17181a';
+  const textSecondary = darkMode ? 'rgba(236,231,218,0.45)' : 'rgba(23,24,26,0.55)';
+  const pageBg        = darkMode ? '#17181a' : '#ece7da';
+  const lineColor      = darkMode ? LINE_DARK : LINE_LIGHT;
 
   const firstName = profileForm.name?.split(' ')[0] || 'Champion';
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: pageBg, color: textPrimary }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: pageBg, color: textPrimary, fontFamily: "'Inter', system-ui, sans-serif" }}>
 
       {/* ── Sidebar ── */}
       <aside style={sx.sidebar}>
         {/* Logo */}
-        <div style={{ padding: '18px 16px', borderBottom: '0.5px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 36, height: 36, borderRadius: 8, background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <FaBolt size={16} color="#fff" />
-          </div>
+        <div style={{ padding: '18px 16px', borderBottom: `1px solid ${LINE_DARK}`, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <svg width="30" height="30" viewBox="0 0 26 26" fill="none">
+            <rect x="1" y="11" width="4" height="4" fill={YELLOW} />
+            <rect x="6" y="8" width="3" height="10" fill="#ece7da" />
+            <rect x="10" y="12" width="6" height="2" fill="#ece7da" />
+            <rect x="17" y="8" width="3" height="10" fill="#ece7da" />
+            <rect x="21" y="11" width="4" height="4" fill={YELLOW} />
+          </svg>
           <div>
-            <p style={{ color: '#fff', fontWeight: 500, fontSize: 15, lineHeight: 1 }}>FitForge</p>
-            <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11, marginTop: 3 }}>Forge your strength</p>
+            <p style={{ color: '#ece7da', fontFamily: DISPLAY, textTransform: 'uppercase', fontSize: 15, lineHeight: 1, margin: 0 }}>FitForge</p>
+            <p style={{ color: 'rgba(236,231,218,0.35)', fontSize: 11, marginTop: 3, marginBottom: 0 }}>Forge your strength</p>
           </div>
         </div>
 
-        {/* Dynamic Sidebar Avatar Feature */}
-        <div style={{ padding: '16px', display: 'flex', alignItems: 'center', gap: 12, borderBottom: '0.5px solid rgba(255,255,255,0.08)' }}>
+        {/* Sidebar avatar */}
+        <div style={{ padding: '16px', display: 'flex', alignItems: 'center', gap: 12, borderBottom: `1px solid ${LINE_DARK}` }}>
           {profileForm.avatar ? (
-            <img src={profileForm.avatar} alt="Avatar Mini Preview" style={{ width: 34, height: 34, borderRadius: '50%', objectFit: 'cover' }} />
+            <img src={profileForm.avatar} alt="Avatar Mini Preview" style={{ width: 34, height: 34, objectFit: 'cover', border: `1px solid ${LINE_DARK}` }} />
           ) : (
-            <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <FaUser size={14} color="rgba(255,255,255,0.6)" />
+            <div style={{ width: 34, height: 34, background: 'rgba(236,231,218,0.08)', border: `1px solid ${LINE_DARK}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <FaUser size={14} color="rgba(236,231,218,0.6)" />
             </div>
           )}
           <div style={{ overflow: 'hidden' }}>
-            <p style={{ color: '#fff', fontSize: 13, fontWeight: 500, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{profileForm.name || 'User'}</p>
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>Active Tier</p>
+            <p style={{ color: '#ece7da', fontSize: 13, fontWeight: 500, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', margin: 0 }}>{profileForm.name || 'User'}</p>
+            <p style={{ color: YELLOW, fontFamily: MONO, fontSize: 10, letterSpacing: '0.04em', margin: 0 }}>ACTIVE LOG</p>
           </div>
         </div>
 
@@ -332,23 +335,23 @@ const Dashboard = () => {
               key={id}
               onClick={() => setCurrentView(id)}
               style={sx.navBtn(currentView === id)}
-              onMouseEnter={e => { if (currentView !== id) { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = 'rgba(255,255,255,0.8)'; }}}
-              onMouseLeave={e => { if (currentView !== id) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}}
+              onMouseEnter={e => { if (currentView !== id) { e.currentTarget.style.background = 'rgba(236,231,218,0.06)'; e.currentTarget.style.color = 'rgba(236,231,218,0.85)'; }}}
+              onMouseLeave={e => { if (currentView !== id) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(236,231,218,0.5)'; }}}
             >
-              <Icon size={15} />
+              <Icon size={14} />
               <span>{label}</span>
             </button>
           ))}
         </nav>
 
-        {/* ── Footer ── */}
-        <div style={{ padding: '12px 10px', borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
+        {/* Footer */}
+        <div style={{ padding: '12px 10px', borderTop: `1px solid ${LINE_DARK}` }}>
           <button style={sx.footerBtn()} onClick={toggleDark}>
-            {darkMode ? <FaSun size={14} /> : <FaMoon size={14} />}
+            {darkMode ? <FaSun size={13} /> : <FaMoon size={13} />}
             <span>{darkMode ? 'Light mode' : 'Dark mode'}</span>
           </button>
           <button style={sx.footerBtn(true)} onClick={handleLogout}>
-            <FaSignOutAlt size={14} />
+            <FaSignOutAlt size={13} />
             <span>Logout</span>
           </button>
         </div>
@@ -360,12 +363,12 @@ const Dashboard = () => {
         {/* Page header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
           <div>
-            <h1 style={{ fontSize: 22, fontWeight: 500, marginBottom: 4 }}>
+            <h1 style={{ fontSize: 21, fontWeight: 600, marginBottom: 4 }}>
               {currentView === 'dashboard'
-                ? `Welcome back, ${firstName}!`
+                ? `Welcome back, ${firstName}`
                 : NAV_ITEMS.find(i => i.id === currentView)?.label ?? ''}
             </h1>
-            <p style={{ fontSize: 13, color: textSecondary }}>
+            <p style={{ fontSize: 13, color: textSecondary, fontFamily: MONO }}>
               {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </div>
@@ -375,11 +378,11 @@ const Dashboard = () => {
               onClick={() => setShowForm(v => !v)}
               style={{
                 display: 'flex', alignItems: 'center', gap: 6,
-                padding: '8px 16px', border: 'none', borderRadius: 8,
-                background: ACCENT, color: '#fff', fontSize: 13, fontWeight: 500, cursor: 'pointer',
+                padding: '9px 16px', border: 'none',
+                background: YELLOW, color: '#17181a', fontSize: 13, fontWeight: 700, cursor: 'pointer',
               }}
             >
-              <FaPlus size={12} />
+              <FaPlus size={11} />
               {showForm ? 'Hide form' : 'New workout'}
             </button>
           )}
@@ -389,20 +392,20 @@ const Dashboard = () => {
         {currentView === 'dashboard' && (
           <>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14, marginBottom: 20 }}>
-              <StatCard title="Total workouts"  value={stats.totalWorkouts}  icon={FaDumbbell} accent="indigo"  dark={darkMode} />
-              <div style={sx.statCard(darkMode)}>
-                <div style={{
-                  width: 36, height: 36, borderRadius: 8, marginBottom: 12,
-                  background: darkMode ? '#0c4a6e' : '#e0f2fe',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <FaClock size={18} color="#0ea5e9" />
-                </div>
-                <p style={{ fontSize: 12, color: textSecondary, marginBottom: 4 }}>Total Time Spent</p>
-                <p style={{ fontSize: 26, fontWeight: 500, lineHeight: 1 }}>{stats.totalDuration} <span style={{ fontSize: 14, color: textSecondary }}>min</span></p>
-              </div>
-              <StatCard title="Avg duration"    value={stats.avgDuration}    unit="min"  icon={FaClock}    accent="emerald"    dark={darkMode} />
+              <StatCard title="Total workouts" value={stats.totalWorkouts} icon={FaDumbbell} accentColor={YELLOW} dark={darkMode} />
+              <StatCard title="Total time spent" value={stats.totalDuration} unit="min" icon={FaClock} accentColor={RED} dark={darkMode} />
+              <StatCard title="Avg duration" value={stats.avgDuration} unit="min" icon={FaClock} accentColor={YELLOW} dark={darkMode} />
             </div>
+
+            {/* "New workout" toggles this — previously only wired up on the Workouts tab */}
+            {showForm && (
+              <div style={{ ...sx.card(darkMode), marginBottom: 16 }}>
+                <div style={sx.cardHeader(darkMode)}>Log new workout</div>
+                <div style={{ padding: 20 }}>
+                  <WorkoutForm onSubmit={addWorkout} dark={darkMode} />
+                </div>
+              </div>
+            )}
 
             <div style={sx.card(darkMode)}>
               <div style={sx.cardHeader(darkMode)}>
@@ -422,14 +425,14 @@ const Dashboard = () => {
               <div style={sx.card(darkMode)}>
                 <div style={sx.cardHeader(darkMode)}>Log new workout</div>
                 <div style={{ padding: 20 }}>
-                  <WorkoutForm onSubmit={addWorkout} />
+                  <WorkoutForm onSubmit={addWorkout} dark={darkMode} />
                 </div>
               </div>
             )}
             <div style={sx.card(darkMode)}>
               <div style={sx.cardHeader(darkMode)}>
                 <span>My workouts</span>
-                <span style={{ fontSize: 12, color: textSecondary, background: darkMode ? 'rgba(255,255,255,0.06)' : '#f1f5f9', padding: '2px 8px', borderRadius: 20 }}>
+                <span style={{ fontSize: 12, fontFamily: MONO, color: textSecondary, border: `1px solid ${lineColor}`, padding: '2px 8px' }}>
                   {workouts.length}
                 </span>
               </div>
@@ -452,47 +455,47 @@ const Dashboard = () => {
         {currentView === 'goals' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontSize: 16, fontWeight: 500 }}>Active Goals Tracker</h2>
-              <button 
+              <h2 style={{ fontSize: 16, fontWeight: 600 }}>Active goals</h2>
+              <button
                 onClick={() => setShowGoalForm(!showGoalForm)}
                 style={{
-                  padding: '8px 16px', border: 'none', borderRadius: 8,
-                  background: ACCENT, color: '#fff', fontSize: 13, fontWeight: 500, cursor: 'pointer',
+                  padding: '9px 16px', border: 'none',
+                  background: YELLOW, color: '#17181a', fontSize: 13, fontWeight: 700, cursor: 'pointer',
                 }}
               >
-                {showGoalForm ? 'Cancel Form' : 'Create new goal'}
+                {showGoalForm ? 'Cancel' : 'Create new goal'}
               </button>
             </div>
 
             {showGoalForm && (
               <form onSubmit={handleCreateGoal} style={{ ...sx.card(darkMode), padding: 20, maxWidth: 500 }}>
-                <h3 style={{ fontSize: 14, fontWeight: 500, marginBottom: 12 }}>New Milestone parameters</h3>
-                <label style={{ fontSize: 12, color: textSecondary }}>Goal Description</label>
-                <input 
-                  type="text" 
-                  placeholder="e.g. 5 Complete Legs Sessions"
+                <h3 style={{ fontSize: 13, fontWeight: 600, marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>New goal</h3>
+                <label style={{ fontSize: 12, color: textSecondary }}>Goal description</label>
+                <input
+                  type="text"
+                  placeholder="e.g. 5 complete leg sessions"
                   value={newGoal.title}
                   onChange={e => setNewGoal(prev => ({ ...prev, title: e.target.value }))}
                   style={sx.input(darkMode)}
                   required
                 />
-                
+
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                   <div>
                     <label style={{ fontSize: 12, color: textSecondary }}>Category</label>
-                    <select 
+                    <select
                       value={newGoal.category}
                       onChange={e => setNewGoal(prev => ({ ...prev, category: e.target.value }))}
                       style={{ ...sx.input(darkMode), cursor: 'pointer' }}
                     >
-                      <option value="Workouts">Workouts Sessions</option>
-                      <option value="Duration">Total Duration (min)</option>
+                      <option value="Workouts">Workout sessions</option>
+                      <option value="Duration">Total duration (min)</option>
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontSize: 12, color: textSecondary }}>Target Count</label>
-                    <input 
-                      type="number" 
+                    <label style={{ fontSize: 12, color: textSecondary }}>Target</label>
+                    <input
+                      type="number"
                       placeholder="e.g. 10"
                       value={newGoal.target}
                       onChange={e => setNewGoal(prev => ({ ...prev, target: e.target.value }))}
@@ -502,8 +505,8 @@ const Dashboard = () => {
                     />
                   </div>
                 </div>
-                <button type="submit" style={{ padding: '8px 20px', border: 'none', background: '#10b981', color: '#fff', borderRadius: 6, fontSize: 13, cursor: 'pointer' }}>
-                  Save Goal
+                <button type="submit" style={{ padding: '9px 20px', border: 'none', background: YELLOW, color: '#17181a', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+                  Save goal
                 </button>
               </form>
             )}
@@ -513,44 +516,43 @@ const Dashboard = () => {
                 <div key={goal.id} style={{ ...sx.card(darkMode), padding: 18, opacity: goal.completed ? 0.75 : 1 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                     <div>
-                      <span style={{ fontSize: 11, background: ACCENT, color: '#fff', padding: '2px 8px', borderRadius: 12, fontWeight: 500 }}>
-                        {goal.category}
+                      <span style={{ fontFamily: MONO, fontSize: 11, border: `1px solid ${lineColor}`, padding: '2px 8px', letterSpacing: '0.04em' }}>
+                        [{goal.category.toUpperCase()}]
                       </span>
-                      <h4 style={{ fontSize: 15, fontWeight: 500, marginTop: 8, marginBottom: 4 }}>{goal.title}</h4>
-                      <p style={{ fontSize: 12, color: textSecondary }}>Progress: {goal.current} / {goal.target}</p>
+                      <h4 style={{ fontSize: 15, fontWeight: 600, marginTop: 8, marginBottom: 4 }}>{goal.title}</h4>
+                      <p style={{ fontSize: 12, fontFamily: MONO, color: textSecondary }}>{goal.current} / {goal.target}</p>
                     </div>
                     <div style={{ display: 'flex', gap: 6 }}>
                       {!goal.completed && (
-                        <button 
+                        <button
                           onClick={() => handleIncrementGoal(goal.id)}
-                          style={{ border: 'none', background: 'rgba(16,185,129,0.1)', color: '#10b981', padding: '6px 10px', borderRadius: 6, cursor: 'pointer', fontSize: 12 }}
-                          title="Log Increment"
+                          style={{ border: `1px solid ${lineColor}`, background: 'transparent', color: textPrimary, padding: '6px 10px', cursor: 'pointer', fontSize: 12 }}
+                          title="Log increment"
                         >
-                          +1 Progress
+                          +1
                         </button>
                       )}
-                      <button 
+                      <button
                         onClick={() => handleDeleteGoal(goal.id)}
-                        style={{ border: 'none', background: 'transparent', color: '#f87171', cursor: 'pointer', padding: 4 }}
+                        style={{ border: 'none', background: 'transparent', color: RED, cursor: 'pointer', padding: 4 }}
                       >
                         <FaTrash size={13} />
                       </button>
                     </div>
                   </div>
 
-                  {/* Progress Bar Display Rendering */}
-                  <div style={{ width: '100%', height: 6, background: darkMode ? '#334155' : '#e2e8f0', borderRadius: 3, overflow: 'hidden', position: 'relative' }}>
+                  <div style={{ width: '100%', height: 5, background: darkMode ? 'rgba(236,231,218,0.1)' : 'rgba(23,24,26,0.08)', position: 'relative' }}>
                     <div style={{
                       width: `${Math.min((goal.current / goal.target) * 100, 100)}%`,
                       height: '100%',
-                      background: goal.completed ? '#10b981' : ACCENT,
+                      background: goal.completed ? GREEN : YELLOW,
                       transition: 'width 0.3s ease'
                     }} />
                   </div>
 
                   {goal.completed && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#10b981', fontSize: 12, marginTop: 10 }}>
-                      <FaCheckCircle size={12} /> <span>Goal Completed Successfully!</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: GREEN, fontSize: 12, marginTop: 10 }}>
+                      <FaCheckCircle size={12} /> <span>Goal completed</span>
                     </div>
                   )}
                 </div>
@@ -565,28 +567,28 @@ const Dashboard = () => {
             <div style={{ ...sx.cardHeader(darkMode), justifyContent: 'space-between' }}>
               <span>My profile</span>
               {!isEditing ? (
-                <button 
+                <button
                   onClick={() => setIsEditing(true)}
                   style={{
                     display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px',
-                    border: `0.5px solid ${darkMode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)'}`,
-                    borderRadius: 8, background: 'transparent', color: ACCENT, fontSize: 13, cursor: 'pointer',
+                    border: `1px solid ${lineColor}`,
+                    background: 'transparent', color: textPrimary, fontSize: 13, cursor: 'pointer',
                   }}
                 >
                   <FaEdit size={12} /> Edit profile
                 </button>
               ) : (
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <button 
+                  <button
                     onClick={saveProfileUpdates}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px',
-                      border: 'none', borderRadius: 8, background: '#10b981', color: '#fff', fontSize: 13, cursor: 'pointer',
+                      border: 'none', background: YELLOW, color: '#17181a', fontSize: 13, fontWeight: 700, cursor: 'pointer',
                     }}
                   >
                     <FaSave size={12} /> Save
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       setIsEditing(false);
                       if (user) {
@@ -597,8 +599,8 @@ const Dashboard = () => {
                     }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px',
-                      border: `0.5px solid ${darkMode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)'}`, 
-                      borderRadius: 8, background: 'transparent', color: '#f87171', fontSize: 13, cursor: 'pointer',
+                      border: `1px solid ${lineColor}`,
+                      background: 'transparent', color: RED, fontSize: 13, cursor: 'pointer',
                     }}
                   >
                     <FaTimes size={12} /> Cancel
@@ -608,66 +610,66 @@ const Dashboard = () => {
             </div>
             <div style={{ padding: 28 }}>
               <div style={{ display: 'flex', gap: 28, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                
-                {/* Avatar Display Frame */}
+
+                {/* Avatar frame */}
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <div style={{
-                    width: 80, height: 80, borderRadius: '50%',
-                    background: darkMode ? '#312e81' : '#eef2ff',
+                    width: 80, height: 80,
+                    background: darkMode ? '#111214' : '#e3ddcd',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    overflow: 'hidden', border: `2px solid ${ACCENT}`
+                    overflow: 'hidden', border: `2px solid ${YELLOW}`
                   }}>
                     {profileForm.avatar ? (
                       <img src={profileForm.avatar} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      <FaUser size={32} color={ACCENT} />
+                      <FaUser size={32} color={YELLOW} />
                     )}
                   </div>
-                  
+
                   {isEditing && (
                     <>
                       <button
                         onClick={() => fileInputRef.current.click()}
                         style={{
-                          position: 'absolute', bottom: -4, right: -4, width: 28, height: 28,
-                          borderRadius: '50%', background: ACCENT, border: 'none',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff'
+                          position: 'absolute', bottom: -4, right: -4, width: 26, height: 26,
+                          background: YELLOW, border: 'none',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#17181a'
                         }}
-                        title="Upload Avatar Image"
+                        title="Upload avatar image"
                       >
                         <FaCamera size={12} />
                       </button>
-                      <input 
-                        type="file" 
-                        ref={fileInputRef} 
-                        onChange={handleAvatarChange} 
-                        accept="image/*" 
-                        style={{ display: 'none' }} 
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleAvatarChange}
+                        accept="image/*"
+                        style={{ display: 'none' }}
                       />
                     </>
                   )}
                 </div>
 
-                {/* Profile Details Content Form */}
+                {/* Profile details */}
                 <div style={{ flex: 1, minWidth: 250 }}>
                   {!isEditing ? (
                     <>
-                      <h2 style={{ fontSize: 18, fontWeight: 500, marginBottom: 4 }}>{profileForm.name || 'User'}</h2>
-                      <p style={{ color: textSecondary, fontSize: 14, marginBottom: 20 }}>{profileForm.email}</p>
+                      <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 4 }}>{profileForm.name || 'User'}</h2>
+                      <p style={{ color: textSecondary, fontSize: 14, marginBottom: 20, fontFamily: MONO }}>{profileForm.email}</p>
                     </>
                   ) : (
                     <div style={{ maxWidth: 400 }}>
-                      <label style={{ fontSize: 12, fontWeight: 500, color: textSecondary }}>Full Name</label>
-                      <input 
-                        type="text" 
-                        value={profileForm.name} 
+                      <label style={{ fontSize: 12, fontWeight: 500, color: textSecondary }}>Full name</label>
+                      <input
+                        type="text"
+                        value={profileForm.name}
                         onChange={e => setProfileForm(prev => ({ ...prev, name: e.target.value }))}
                         style={sx.input(darkMode)}
                       />
-                      <label style={{ fontSize: 12, fontWeight: 500, color: textSecondary }}>Email Address</label>
-                      <input 
-                        type="email" 
-                        value={profileForm.email} 
+                      <label style={{ fontSize: 12, fontWeight: 500, color: textSecondary }}>Email address</label>
+                      <input
+                        type="email"
+                        value={profileForm.email}
                         disabled
                         style={{ ...sx.input(darkMode), opacity: 0.6, cursor: 'not-allowed' }}
                       />
@@ -681,9 +683,9 @@ const Dashboard = () => {
                       ['Total duration', `${stats.totalDuration} min`],
                       ['Avg duration per session', `${stats.avgDuration} min`],
                     ].map(([label, val]) => (
-                      <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: `0.5px solid ${darkMode ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}` }}>
+                      <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid ${lineColor}` }}>
                         <span style={{ color: textSecondary }}>{label}</span>
-                        <span style={{ fontWeight: 500 }}>{val}</span>
+                        <span style={{ fontWeight: 600, fontFamily: MONO }}>{val}</span>
                       </div>
                     ))}
                   </div>
@@ -698,33 +700,33 @@ const Dashboard = () => {
         {currentView === 'settings' && (
           <div style={sx.card(darkMode)}>
             <div style={sx.cardHeader(darkMode)}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}><FaCog size={14} /> Application settings</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}><FaCog size={13} /> Application settings</span>
             </div>
             <div style={{ padding: 28 }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
 
                 {/* General */}
                 <div>
-                  <h3 style={{ fontSize: 13, fontWeight: 500, color: textSecondary, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>General</h3>
-                  <SettingRow label="Dark mode" desc="Toggle dark theme" dark={darkMode}>
+                  <h3 style={{ fontSize: 12, fontWeight: 700, color: textSecondary, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>General</h3>
+                  <SettingRow label="Dark mode" desc="Toggle dark theme" dark={darkMode} lineColor={lineColor}>
                     <label style={{ position: 'relative', display: 'inline-block', width: 40, height: 22 }}>
                       <input type="checkbox" checked={darkMode} onChange={toggleDark} style={{ opacity: 0, width: 0, height: 0 }} />
                       <span style={{
-                        position: 'absolute', inset: 0, background: darkMode ? ACCENT : '#d1d5db',
-                        borderRadius: 11, transition: 'background 0.2s', cursor: 'pointer',
+                        position: 'absolute', inset: 0, background: darkMode ? YELLOW : '#c9c3b3',
+                        transition: 'background 0.2s', cursor: 'pointer',
                       }}>
                         <span style={{
                           position: 'absolute', top: 3, left: darkMode ? 21 : 3,
-                          width: 16, height: 16, background: '#fff', borderRadius: '50%', transition: 'left 0.2s',
+                          width: 16, height: 16, background: darkMode ? '#17181a' : '#fff', transition: 'left 0.2s',
                         }} />
                       </span>
                     </label>
                   </SettingRow>
-                  <SettingRow label="Measurement units" dark={darkMode}>
+                  <SettingRow label="Measurement units" dark={darkMode} lineColor={lineColor}>
                     <select defaultValue="metric" style={{
-                      padding: '5px 10px', borderRadius: 6, fontSize: 12,
-                      border: `0.5px solid ${darkMode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)'}`,
-                      background: darkMode ? '#1e293b' : '#fff',
+                      padding: '5px 10px', fontSize: 12,
+                      border: `1px solid ${lineColor}`,
+                      background: 'transparent',
                       color: textPrimary,
                     }}>
                       <option value="metric">Metric (kg, cm)</option>
@@ -735,10 +737,10 @@ const Dashboard = () => {
 
                 {/* Notifications */}
                 <div>
-                  <h3 style={{ fontSize: 13, fontWeight: 500, color: textSecondary, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>Notifications</h3>
+                  <h3 style={{ fontSize: 12, fontWeight: 700, color: textSecondary, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>Notifications</h3>
                   {['Daily workout reminder', 'Streak alerts', 'Progress milestones'].map(label => (
-                    <SettingRow key={label} label={label} dark={darkMode}>
-                      <Toggle defaultChecked accent={ACCENT} />
+                    <SettingRow key={label} label={label} dark={darkMode} lineColor={lineColor}>
+                      <Toggle defaultChecked accent={YELLOW} dark={darkMode} />
                     </SettingRow>
                   ))}
                 </div>
@@ -746,18 +748,18 @@ const Dashboard = () => {
 
               {/* Security */}
               <div style={{ marginTop: 32 }}>
-                <h3 style={{ fontSize: 13, fontWeight: 500, color: textSecondary, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>Privacy &amp; security</h3>
+                <h3 style={{ fontSize: 12, fontWeight: 700, color: textSecondary, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }}>Privacy &amp; security</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 32px' }}>
-                  <SettingRow label="Two-factor authentication" dark={darkMode} icon={<FaLock size={12} />}>
+                  <SettingRow label="Two-factor authentication" dark={darkMode} lineColor={lineColor} icon={<FaLock size={12} />}>
                     <button style={{
-                      padding: '5px 14px', borderRadius: 6, fontSize: 12,
-                      border: `0.5px solid ${ACCENT}`, background: 'transparent', color: ACCENT, cursor: 'pointer',
+                      padding: '5px 14px', fontSize: 12,
+                      border: `1px solid ${YELLOW}`, background: 'transparent', color: darkMode ? YELLOW : '#8a6d00', cursor: 'pointer',
                     }}>Enable</button>
                   </SettingRow>
-                  <SettingRow label="Export my data" dark={darkMode}>
+                  <SettingRow label="Export my data" dark={darkMode} lineColor={lineColor}>
                     <button style={{
-                      padding: '5px 14px', borderRadius: 6, fontSize: 12,
-                      border: `0.5px solid ${darkMode ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)'}`,
+                      padding: '5px 14px', fontSize: 12,
+                      border: `1px solid ${lineColor}`,
                       background: 'transparent', color: textPrimary, cursor: 'pointer',
                     }}>Download</button>
                   </SettingRow>
@@ -766,8 +768,8 @@ const Dashboard = () => {
 
               <div style={{ marginTop: 32, textAlign: 'right' }}>
                 <button style={{
-                  padding: '10px 28px', border: 'none', borderRadius: 8,
-                  background: ACCENT, color: '#fff', fontSize: 13, fontWeight: 500, cursor: 'pointer',
+                  padding: '10px 28px', border: 'none',
+                  background: YELLOW, color: '#17181a', fontSize: 13, fontWeight: 700, cursor: 'pointer',
                 }}>Save changes</button>
               </div>
             </div>
@@ -780,18 +782,18 @@ const Dashboard = () => {
 
 /* ── Small helpers ────────────────────────────────────────────────── */
 
-function SettingRow({ label, desc, children, dark, icon }) {
+function SettingRow({ label, desc, children, dark, icon, lineColor }) {
   return (
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '11px 0',
-      borderBottom: `0.5px solid ${dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+      borderBottom: `1px solid ${lineColor}`,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
         {icon}
         <div>
-          <p style={{ fontSize: 13, fontWeight: 500 }}>{label}</p>
-          {desc && <p style={{ fontSize: 11, color: dark ? 'rgba(255,255,255,0.35)' : '#9ca3af', marginTop: 1 }}>{desc}</p>}
+          <p style={{ fontSize: 13, fontWeight: 500, margin: 0 }}>{label}</p>
+          {desc && <p style={{ fontSize: 11, color: dark ? 'rgba(236,231,218,0.35)' : 'rgba(23,24,26,0.45)', marginTop: 1, marginBottom: 0 }}>{desc}</p>}
         </div>
       </div>
       {children}
@@ -799,15 +801,15 @@ function SettingRow({ label, desc, children, dark, icon }) {
   );
 }
 
-function Toggle({ defaultChecked, accent }) {
+function Toggle({ defaultChecked, accent, dark }) {
   const [on, setOn] = useState(defaultChecked ?? false);
   return (
     <label style={{ position: 'relative', display: 'inline-block', width: 40, height: 22, cursor: 'pointer' }}>
       <input type="checkbox" checked={on} onChange={() => setOn(v => !v)} style={{ opacity: 0, width: 0, height: 0 }} />
-      <span style={{ position: 'absolute', inset: 0, background: on ? accent : '#d1d5db', borderRadius: 11, transition: 'background 0.2s' }}>
+      <span style={{ position: 'absolute', inset: 0, background: on ? accent : (dark ? 'rgba(236,231,218,0.15)' : '#c9c3b3'), transition: 'background 0.2s' }}>
         <span style={{
           position: 'absolute', top: 3, left: on ? 21 : 3,
-          width: 16, height: 16, background: '#fff', borderRadius: '50%', transition: 'left 0.2s',
+          width: 16, height: 16, background: on ? '#17181a' : '#fff', transition: 'left 0.2s',
         }} />
       </span>
     </label>

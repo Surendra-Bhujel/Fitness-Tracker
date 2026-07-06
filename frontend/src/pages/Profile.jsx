@@ -108,9 +108,9 @@ const Profile = () => {
       setMessage({ type: 'success', text: 'Profile picture updated successfully!' });
     } catch (error) {
       console.error('Upload error:', error);
-      setMessage({ 
-        type: 'error', 
-        text: error.response?.data?.message || 'Failed to upload profile picture' 
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.message || 'Failed to upload profile picture'
       });
       setAvatarPreview(user?.avatar || null);
     } finally {
@@ -193,16 +193,16 @@ const Profile = () => {
     }
   };
 
-  const StatCard = ({ icon, value, label, color }) => (
-    <div className={`bg-dark border border-secondary rounded-3 p-3 text-center`}>
-      <div className={`text-${color} mb-1`}>{icon}</div>
-      <div className="text-white display-6 fw-bold">{value}</div>
+  const StatCard = ({ icon, value, label }) => (
+    <div className="stat-tile text-center p-3">
+      <div className="mb-1" style={{ color: '#f5c400' }}>{icon}</div>
+      <div className="text-white display-6 fw-bold" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '1.8rem' }}>{value}</div>
       <div className="text-muted small">{label}</div>
     </div>
   );
 
   return (
-    <div className="bg-dark min-vh-100">
+    <div className="fitforge-profile min-vh-100">
       <Navbar />
 
       <div className="container py-5">
@@ -213,10 +213,10 @@ const Profile = () => {
               animate={{ opacity: 1, x: 0 }}
             >
               <button
-                className="btn btn-outline-secondary mb-4"
+                className="btn btn-outline-secondary mb-4 square-btn"
                 onClick={() => navigate('/dashboard')}
               >
-                <FaArrowLeft className="me-2" /> Back to Dashboard
+                <FaArrowLeft className="me-2" /> Back to dashboard
               </button>
             </motion.div>
 
@@ -224,7 +224,7 @@ const Profile = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`alert alert-${message.type === 'success' ? 'success' : 'danger'} mb-3`}
+                className={`alert-log alert-log-${message.type === 'success' ? 'success' : 'error'} mb-3`}
               >
                 {message.text}
               </motion.div>
@@ -238,18 +238,17 @@ const Profile = () => {
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                <div className="card bg-dark border-secondary shadow-lg">
+                <div className="card-log">
                   <div className="card-body text-center p-4">
                     <div className="position-relative d-inline-block mb-3">
                       <div
-                        className="bg-gradient-teal rounded-circle d-flex align-items-center justify-content-center mx-auto"
-                        style={{ width: '120px', height: '120px', overflow: 'hidden', border: '3px solid #14b8a6' }}
+                        className="avatar-frame d-flex align-items-center justify-content-center mx-auto"
                       >
                         {avatarPreview ? (
-                          <img 
-                            src={avatarPreview} 
-                            alt="Profile" 
-                            className="w-100 h-100 object-fit-cover" 
+                          <img
+                            src={avatarPreview}
+                            alt="Profile"
+                            className="w-100 h-100 object-fit-cover"
                           />
                         ) : (
                           <FaUserCircle size={70} className="text-white" />
@@ -258,10 +257,10 @@ const Profile = () => {
 
                       <label
                         htmlFor="avatar-upload"
-                        className={`btn btn-dark position-absolute bottom-0 end-0 rounded-circle border border-teal d-flex align-items-center justify-content-center ${uploading ? 'disabled' : ''}`}
-                        style={{ width: '40px', height: '40px', cursor: uploading ? 'not-allowed' : 'pointer' }}
+                        className={`avatar-upload-btn d-flex align-items-center justify-content-center ${uploading ? 'disabled' : ''}`}
+                        style={{ cursor: uploading ? 'not-allowed' : 'pointer' }}
                       >
-                        {uploading ? '⏳' : <FaCamera size={18} />}
+                        {uploading ? '⏳' : <FaCamera size={16} />}
                       </label>
                       <input
                         type="file"
@@ -272,45 +271,30 @@ const Profile = () => {
                       />
                     </div>
 
-                    <h4 className="text-white">{user?.name}</h4>
-                    <p className="text-muted small">{user?.email}</p>
+                    <h4 className="text-white" style={{ fontFamily: "'Anton', sans-serif", textTransform: 'uppercase', letterSpacing: '0.02em' }}>{user?.name}</h4>
+                    <p className="text-muted small" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{user?.email}</p>
 
-                    <hr className="border-secondary my-3" />
+                    <hr className="log-divider my-3" />
 
                     <div className="row g-2">
                       <div className="col-6">
-                        <StatCard
-                          icon={<FaDumbbell size={20} />}
-                          value={stats.totalWorkouts}
-                          label="Workouts"
-                          color="primary"
-                        />
+                        <StatCard icon={<FaDumbbell size={18} />} value={stats.totalWorkouts} label="Workouts" />
                       </div>
                       <div className="col-6">
-                        <StatCard
-                          icon={<FaFire size={20} />}
-                          value={stats.totalCalories}
-                          label="Calories"
-                          color="danger"
-                        />
+                        <StatCard icon={<FaFire size={18} />} value={stats.totalCalories} label="Calories" />
                       </div>
                       <div className="col-12 mt-2">
-                        <StatCard
-                          icon={<FaClock size={20} />}
-                          value={`${stats.avgDuration} min`}
-                          label="Avg Duration"
-                          color="info"
-                        />
+                        <StatCard icon={<FaClock size={18} />} value={`${stats.avgDuration} min`} label="Avg duration" />
                       </div>
                     </div>
 
-                    <hr className="border-secondary my-3" />
+                    <hr className="log-divider my-3" />
 
                     <button
-                      className="btn btn-outline-danger w-100"
+                      className="btn btn-outline-danger w-100 square-btn"
                       onClick={() => setShowDeleteModal(true)}
                     >
-                      <FaTrash className="me-2" /> Delete Account
+                      <FaTrash className="me-2" /> Delete account
                     </button>
                   </div>
                 </div>
@@ -324,13 +308,13 @@ const Profile = () => {
                 transition={{ delay: 0.2 }}
               >
                 {/* Profile Edit */}
-                <div className="card bg-dark border-secondary shadow-lg mb-4">
-                  <div className="card-header bg-transparent border-secondary d-flex justify-content-between align-items-center">
-                    <h5 className="text-white mb-0">
-                      <FaUser className="me-2 text-teal" /> Profile Information
+                <div className="card-log mb-4">
+                  <div className="card-log-header d-flex justify-content-between align-items-center">
+                    <h5 className="text-white mb-0" style={{ fontSize: 15, fontWeight: 600 }}>
+                      <FaUser className="me-2" style={{ color: '#f5c400' }} /> Profile information
                     </h5>
                     <button
-                      className="btn btn-sm btn-outline-teal"
+                      className="btn-log-outline"
                       onClick={() => setIsEditing(!isEditing)}
                     >
                       <FaEdit className="me-1" /> {isEditing ? 'Cancel' : 'Edit'}
@@ -340,10 +324,10 @@ const Profile = () => {
                     {isEditing ? (
                       <form onSubmit={handleProfileUpdate}>
                         <div className="mb-3">
-                          <label className="form-label text-light small">Full Name</label>
+                          <label className="form-label text-light small">Full name</label>
                           <input
                             type="text"
-                            className="form-control bg-dark text-white border-secondary"
+                            className="form-control log-input"
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             required
@@ -351,10 +335,10 @@ const Profile = () => {
                         </div>
 
                         <div className="mb-3">
-                          <label className="form-label text-light small">Email Address</label>
+                          <label className="form-label text-light small">Email address</label>
                           <input
                             type="email"
-                            className="form-control bg-dark text-white border-secondary"
+                            className="form-control log-input"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             required
@@ -362,25 +346,24 @@ const Profile = () => {
                         </div>
 
                         <motion.button
-                          whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           type="submit"
-                          className="btn btn-teal w-100"
+                          className="btn-log-solid w-100"
                           disabled={loading}
                         >
                           <FaSave className="me-2" />
-                          {loading ? 'Saving...' : 'Save Changes'}
+                          {loading ? 'Saving...' : 'Save changes'}
                         </motion.button>
                       </form>
                     ) : (
                       <div>
-                        <div className="d-flex justify-content-between py-2 border-bottom border-secondary">
+                        <div className="d-flex justify-content-between py-2 log-row">
                           <span className="text-muted">Name</span>
                           <span className="text-white">{user?.name}</span>
                         </div>
-                        <div className="d-flex justify-content-between py-2 border-bottom border-secondary">
+                        <div className="d-flex justify-content-between py-2 log-row">
                           <span className="text-muted">Email</span>
-                          <span className="text-white">{user?.email}</span>
+                          <span className="text-white" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{user?.email}</span>
                         </div>
                       </div>
                     )}
@@ -388,27 +371,27 @@ const Profile = () => {
                 </div>
 
                 {/* Change Password */}
-                <div className="card bg-dark border-secondary shadow-lg">
-                  <div className="card-header bg-transparent border-secondary">
-                    <h5 className="text-white mb-0">
-                      <FaLock className="me-2 text-warning" /> Change Password
+                <div className="card-log">
+                  <div className="card-log-header">
+                    <h5 className="text-white mb-0" style={{ fontSize: 15, fontWeight: 600 }}>
+                      <FaLock className="me-2" style={{ color: '#c1272d' }} /> Change password
                     </h5>
                   </div>
                   <div className="card-body">
                     <form onSubmit={handlePasswordChange}>
                       <div className="mb-3">
-                        <label className="form-label text-light small">Current Password</label>
+                        <label className="form-label text-light small">Current password</label>
                         <div className="input-group">
                           <input
                             type={showCurrentPassword ? "text" : "password"}
-                            className="form-control bg-dark text-white border-secondary"
+                            className="form-control log-input"
                             value={passwordData.currentPassword}
                             onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                             required
                           />
                           <button
                             type="button"
-                            className="btn btn-outline-secondary border-secondary"
+                            className="btn log-input-toggle"
                             onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                           >
                             {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
@@ -417,18 +400,18 @@ const Profile = () => {
                       </div>
 
                       <div className="mb-3">
-                        <label className="form-label text-light small">New Password</label>
+                        <label className="form-label text-light small">New password</label>
                         <div className="input-group">
                           <input
                             type={showNewPassword ? "text" : "password"}
-                            className="form-control bg-dark text-white border-secondary"
+                            className="form-control log-input"
                             value={passwordData.newPassword}
                             onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                             required
                           />
                           <button
                             type="button"
-                            className="btn btn-outline-secondary border-secondary"
+                            className="btn log-input-toggle"
                             onClick={() => setShowNewPassword(!showNewPassword)}
                           >
                             {showNewPassword ? <FaEyeSlash /> : <FaEye />}
@@ -437,18 +420,18 @@ const Profile = () => {
                       </div>
 
                       <div className="mb-3">
-                        <label className="form-label text-light small">Confirm New Password</label>
+                        <label className="form-label text-light small">Confirm new password</label>
                         <div className="input-group">
                           <input
                             type={showConfirmPassword ? "text" : "password"}
-                            className="form-control bg-dark text-white border-secondary"
+                            className="form-control log-input"
                             value={passwordData.confirmPassword}
                             onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                             required
                           />
                           <button
                             type="button"
-                            className="btn btn-outline-secondary border-secondary"
+                            className="btn log-input-toggle"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                           >
                             {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
@@ -457,14 +440,13 @@ const Profile = () => {
                       </div>
 
                       <motion.button
-                        whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         type="submit"
-                        className="btn btn-warning w-100"
+                        className="btn-log-danger w-100"
                         disabled={loading}
                       >
                         <FaLock className="me-2" />
-                        {loading ? 'Updating...' : 'Change Password'}
+                        {loading ? 'Updating...' : 'Change password'}
                       </motion.button>
                     </form>
                   </div>
@@ -479,25 +461,25 @@ const Profile = () => {
       {showDeleteModal && (
         <div
           className="modal show d-block"
-          style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}
+          style={{ background: 'rgba(0,0,0,0.7)' }}
           onClick={() => setShowDeleteModal(false)}
         >
           <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-content bg-dark text-light border-secondary">
-              <div className="modal-header border-secondary">
-                <h5 className="text-danger">⚠️ Delete Account</h5>
+            <div className="modal-content-log">
+              <div className="modal-header-log">
+                <h5 style={{ color: '#c1272d', fontFamily: "'Anton', sans-serif", textTransform: 'uppercase', fontSize: 18 }}>Delete account</h5>
                 <button className="btn-close btn-close-white" onClick={() => setShowDeleteModal(false)} />
               </div>
-              <div className="modal-body">
+              <div className="modal-body-log">
                 <p>Are you sure you want to delete your account?</p>
                 <p className="text-muted small">This action cannot be undone. All your data will be permanently deleted.</p>
               </div>
-              <div className="modal-footer border-secondary">
-                <button className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>
+              <div className="modal-footer-log">
+                <button className="btn-log-outline" onClick={() => setShowDeleteModal(false)}>
                   Cancel
                 </button>
-                <button className="btn btn-danger" onClick={handleDeleteAccount}>
-                  <FaTrash className="me-2" /> Delete Account
+                <button className="btn-log-danger" onClick={handleDeleteAccount}>
+                  <FaTrash className="me-2" /> Delete account
                 </button>
               </div>
             </div>
@@ -506,27 +488,119 @@ const Profile = () => {
       )}
 
       <style jsx>{`
-        .bg-gradient-teal {
-          background: linear-gradient(135deg, #14b8a6, #0d9488);
+        .fitforge-profile {
+          background: #17181a;
         }
-        .btn-teal {
-          background: linear-gradient(135deg, #14b8a6, #0d9488);
-          color: white;
+        .square-btn {
+          border-radius: 0 !important;
+        }
+        .card-log {
+          background: #1e1f21;
+          border: 1px solid rgba(236,231,218,0.14);
+          border-radius: 0;
+          box-shadow: none;
+        }
+        .card-log-header {
+          padding: 14px 20px;
+          border-bottom: 1px solid rgba(236,231,218,0.14);
+          display: flex;
+          align-items: center;
+        }
+        .log-divider {
+          border-color: rgba(236,231,218,0.14);
+          opacity: 1;
+        }
+        .log-row {
+          border-bottom: 1px solid rgba(236,231,218,0.1);
+        }
+        .stat-tile {
+          background: rgba(236,231,218,0.04);
+          border: 1px solid rgba(236,231,218,0.1);
+        }
+        .avatar-frame {
+          width: 120px;
+          height: 120px;
+          overflow: hidden;
+          border: 2px solid #f5c400;
+          background: #111214;
+        }
+        .avatar-upload-btn {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          width: 38px;
+          height: 38px;
+          background: #f5c400;
+          color: #17181a;
           border: none;
+        }
+        .log-input {
+          background: transparent !important;
+          border: 1px solid rgba(236,231,218,0.28) !important;
+          border-radius: 0 !important;
+          color: #ece7da !important;
+          font-family: 'JetBrains Mono', monospace;
+        }
+        .log-input:focus {
+          border-color: #f5c400 !important;
+          box-shadow: none !important;
+        }
+        .log-input-toggle {
+          border: 1px solid rgba(236,231,218,0.28) !important;
+          border-radius: 0 !important;
+          color: #ece7da !important;
+        }
+        .btn-log-solid {
+          background: #f5c400;
+          color: #17181a;
+          border: none;
+          font-weight: 700;
+          padding: 11px;
+          border-radius: 0;
+        }
+        .btn-log-solid:hover { background: #ffd633; color: #17181a; }
+        .btn-log-danger {
+          background: transparent;
+          color: #c1272d;
+          border: 1px solid #c1272d;
           font-weight: 600;
+          padding: 11px;
+          border-radius: 0;
         }
-        .btn-teal:hover {
-          background: linear-gradient(135deg, #0d9488, #0f766e);
-          color: white;
+        .btn-log-danger:hover { background: #c1272d; color: #ece7da; }
+        .btn-log-outline {
+          background: transparent;
+          color: #ece7da;
+          border: 1px solid rgba(236,231,218,0.28);
+          border-radius: 0;
+          font-size: 13px;
+          padding: 6px 14px;
         }
-        .btn-outline-teal {
-          color: #14b8a6;
-          border-color: #14b8a6;
+        .btn-log-outline:hover { border-color: #f5c400; color: #f5c400; }
+        .alert-log {
+          padding: 12px 16px;
+          border: 1px solid;
+          font-size: 14px;
         }
-        .btn-outline-teal:hover {
-          background: #14b8a6;
-          color: white;
+        .alert-log-success { border-color: #5c7a4f; color: #a8c398; background: rgba(92,122,79,0.12); }
+        .alert-log-error { border-color: #c1272d; color: #f3a3a6; background: rgba(193,39,45,0.12); }
+        .modal-content-log {
+          background: #1e1f21;
+          border: 1px solid rgba(236,231,218,0.2);
+          border-radius: 0;
+          color: #ece7da;
         }
+        .modal-header-log, .modal-footer-log {
+          padding: 16px 20px;
+          border-color: rgba(236,231,218,0.14);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 10px;
+        }
+        .modal-header-log { border-bottom: 1px solid rgba(236,231,218,0.14); }
+        .modal-footer-log { border-top: 1px solid rgba(236,231,218,0.14); justify-content: flex-end; }
+        .modal-body-log { padding: 20px; }
       `}</style>
     </div>
   );

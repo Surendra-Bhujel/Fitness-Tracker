@@ -5,6 +5,16 @@ import { AuthContext } from '../context/AuthContext';
 import { FaEye, FaEyeSlash, FaDumbbell } from 'react-icons/fa';
 import API from '../services/api';
 
+const BG = '#17181a';
+const PAPER = '#ece7da';
+const INK = '#17181a';
+const YELLOW = '#f5c400';
+const RED = '#c1272d';
+const TEXT = '#ece7da';
+const TEXT_DIM = 'rgba(236,231,218,0.55)';
+const LINE = 'rgba(236,231,218,0.14)';
+const LINE_STRONG = 'rgba(236,231,218,0.28)';
+
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,138 +42,102 @@ const LoginPage = () => {
 
   const inputStyle = {
     width: '100%',
-    background: 'rgba(255,255,255,0.05)',
-    border: '0.5px solid rgba(255,255,255,0.1)',
-    borderRadius: 10,
-    padding: '11px 14px',
-    fontSize: 14,
-    color: 'white',
+    background: 'rgba(236,231,218,0.08)',
+    border: `1px solid ${LINE_STRONG}`,
+    borderRadius: 6,
+    padding: '13px 16px',
+    fontSize: 15,
+    color: TEXT,
     outline: 'none',
-    transition: 'border-color .2s',
-  };
-
-  const labelStyle = {
-    display: 'block',
-    fontSize: 11,
-    fontWeight: 700,
-    color: 'rgba(255,255,255,0.5)',
-    letterSpacing: '.05em',
-    textTransform: 'uppercase',
-    marginBottom: 6,
+    fontFamily: "'Inter', system-ui, sans-serif",
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: '#0f172a',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem',
-      }}
-    >
+    <div style={{ minHeight: '100vh', background: BG, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', color: TEXT }}>
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         style={{
           width: '100%',
-          maxWidth: 900,
+          maxWidth: 960,
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          borderRadius: 20,
+          border: `1px solid ${LINE}`,
+          borderRadius: 12,
           overflow: 'hidden',
-          border: '0.5px solid rgba(255,255,255,0.08)',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
         }}
       >
-        {/* ── LEFT PANEL ── */}
+        {/* LEFT PANEL - Branding */}
         <div
           style={{
-            position: 'relative',
-            background: '#0c1628',
-            padding: '3rem 2.5rem',
+            background: '#1e1f21',
+            padding: '3.5rem 2.8rem',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
-            overflow: 'hidden',
+            borderRight: `1px solid ${LINE}`,
           }}
           className="d-none d-lg-flex"
         >
-          {/* Grid */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)',
-            backgroundSize: '40px 40px', pointerEvents: 'none',
-          }} />
-          {/* Orbs */}
-          <div style={{ position: 'absolute', width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle,rgba(20,184,166,0.2) 0%,transparent 70%)', top: -60, right: -60, pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', width: 220, height: 220, borderRadius: '50%', background: 'radial-gradient(circle,rgba(99,102,241,0.18) 0%,transparent 70%)', bottom: -40, left: -40, pointerEvents: 'none' }} />
-
-          <div style={{ position: 'relative', zIndex: 2 }}>
-            {/* Brand */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center', marginBottom: '2.5rem' }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: 'linear-gradient(135deg,#14b8a6,#6366f1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <FaDumbbell size={17} color="white" />
-              </div>
-              <span style={{ fontSize: 20, fontWeight: 700, color: 'white' }}>FitForge</span>
+          <div style={{ marginBottom: '2.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center', marginBottom: '1.5rem' }}>
+              <FaDumbbell size={42} color={YELLOW} />
+              <span style={{ fontSize: 28, fontWeight: 700, letterSpacing: '0.02em' }}>FITFORGE</span>
             </div>
+          </div>
 
-            {/* Icon ring */}
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              style={{
-                width: 80, height: 80, borderRadius: '50%',
-                background: 'rgba(20,184,166,0.12)',
-                border: '0.5px solid rgba(20,184,166,0.3)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 1.5rem',
-              }}
-            >
-              <FaDumbbell size={32} color="#14b8a6" />
-            </motion.div>
+          <h2 style={{ fontSize: '1.85rem', lineHeight: 1.1, marginBottom: '1rem', fontFamily: "'Anton', sans-serif", textTransform: 'uppercase' }}>
+            Back to the iron.
+          </h2>
+          <p style={{ color: TEXT_DIM, maxWidth: 260, lineHeight: 1.6 }}>
+            Your numbers are waiting. Log in and keep the streak alive.
+          </p>
 
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '.5rem' }}>Welcome back</h2>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, maxWidth: 220, margin: '0 auto 2rem' }}>
-              Continue your fitness journey where you left off
-            </p>
-
-            {/* Feature list */}
-            {['Track every workout', 'AI-powered insights', 'Real-time progress'].map((f, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, textAlign: 'left' }}>
-                <div style={{ width: 24, height: 24, borderRadius: 7, background: 'rgba(20,184,166,0.2)', border: '0.5px solid rgba(20,184,166,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span style={{ color: '#14b8a6', fontSize: 11, fontWeight: 700 }}>✓</span>
-                </div>
-                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>{f}</span>
-              </div>
-            ))}
+          <div style={{ marginTop: '3rem', width: '100%', maxWidth: 240 }}>
+            <div style={{ border: `1px solid ${LINE}`, padding: '1.25rem', textAlign: 'left' }}>
+              <div style={{ fontSize: 13, color: YELLOW, marginBottom: 8 }}>LAST SESSION</div>
+              <div style={{ fontSize: 15, marginBottom: 4 }}>Bench Press — 4×5 @ 185</div>
+              <div style={{ fontSize: 13, color: TEXT_DIM }}>3 days ago</div>
+            </div>
           </div>
         </div>
 
-        {/* ── RIGHT PANEL ── */}
-        <div style={{ background: '#111827', padding: '3rem 2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ marginBottom: '1.75rem' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '.3rem' }}>Sign in</h2>
-            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)' }}>Enter your credentials to continue</p>
+        {/* RIGHT PANEL - Form */}
+        <div style={{ background: BG, padding: '3.5rem 3rem' }}>
+          <div style={{ marginBottom: '2rem' }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '0.5rem', textTransform: 'uppercase', fontFamily: "'Anton', sans-serif" }}>
+              Sign In
+            </h2>
+            <p style={{ color: TEXT_DIM }}>Continue logging your lifts</p>
           </div>
 
           {error && (
             <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              style={{ background: 'rgba(239,68,68,0.1)', border: '0.5px solid rgba(239,68,68,0.3)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: '#fca5a5', marginBottom: '1.25rem' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{
+                background: 'rgba(193,39,45,0.15)',
+                border: `1px solid ${RED}`,
+                color: '#ff9b9b',
+                padding: '12px 16px',
+                borderRadius: 6,
+                marginBottom: '1.5rem',
+                fontSize: 14
+              }}
             >
               {error}
             </motion.div>
           )}
 
           <form onSubmit={handleSubmit}>
-            {/* Email */}
-            <div style={{ marginBottom: '1.25rem' }}>
-              <label style={labelStyle}>Email address</label>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label style={{ display: 'block', fontSize: 12, color: TEXT_DIM, marginBottom: 8, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                Email
+              </label>
               <input
                 type="email"
                 style={inputStyle}
@@ -171,60 +145,68 @@ const LoginPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                onFocus={(e) => e.target.style.borderColor = 'rgba(20,184,166,0.5)'}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
               />
             </div>
 
-            {/* Password */}
-            <div style={{ marginBottom: '.75rem' }}>
-              <label style={labelStyle}>Password</label>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label style={{ display: 'block', fontSize: 12, color: TEXT_DIM, marginBottom: 8, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                Password
+              </label>
               <div style={{ position: 'relative' }}>
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  style={{ ...inputStyle, paddingRight: 44 }}
+                  style={{ ...inputStyle, paddingRight: 50 }}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  onFocus={(e) => e.target.style.borderColor = 'rgba(20,184,166,0.5)'}
-                  onBlur={(e) => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', padding: 0 }}
+                  style={{
+                    position: 'absolute',
+                    right: 16,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: TEXT_DIM,
+                    cursor: 'pointer'
+                  }}
                 >
-                  {showPassword ? <FaEyeSlash size={17} /> : <FaEye size={17} />}
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
                 </button>
               </div>
             </div>
 
-            {/* Forgot */}
-            <div style={{ textAlign: 'right', marginBottom: '1.5rem' }}>
-              <a href="#" style={{ fontSize: 12, color: '#14b8a6', textDecoration: 'none' }}>Forgot password?</a>
-            </div>
-
             <motion.button
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
+              whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
               style={{
-                width: '100%', padding: '12px', borderRadius: 10, border: 'none',
-                background: 'linear-gradient(90deg,#14b8a6,#6366f1)',
-                color: 'white', fontSize: 15, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.7 : 1,
+                width: '100%',
+                padding: '14px',
+                background: YELLOW,
+                color: INK,
+                border: 'none',
+                borderRadius: 6,
+                fontSize: 15,
+                fontWeight: 700,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.75 : 1,
+                marginTop: '0.5rem'
               }}
             >
-              {loading ? 'Signing in…' : 'Sign in →'}
+              {loading ? 'SIGNING IN...' : 'SIGN IN'}
             </motion.button>
           </form>
 
-          <p style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
+          <p style={{ textAlign: 'center', marginTop: '2rem', color: TEXT_DIM, fontSize: 14 }}>
             Don't have an account?{' '}
-            <Link to="/register" style={{ color: '#14b8a6', textDecoration: 'none', fontWeight: 600 }}>
-              Create one free
+            <Link to="/register" style={{ color: YELLOW, fontWeight: 600, textDecoration: 'none' }}>
+              Create one
             </Link>
           </p>
         </div>
