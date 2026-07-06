@@ -13,9 +13,9 @@ app.use(cors());
 app.use(express.json()); // to parse JSON body
 
 // ROUTES
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/workouts', require('./routes/workout'));
-app.use('/api/admin', require('./routes/admin'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/workouts', require('./routes/workoutRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
