@@ -6,25 +6,23 @@ require("dotenv").config();
 
 const app = express();
 
-// Middleware
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  }),
-);
-
+app.use(cors());
 app.use(express.json());
+
+// Health check
+app.get("/", (req, res) => {
+  res.json({
+    message: "Fitness Tracker API is running",
+  });
+});
 
 // Routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/workouts", require("./routes/workoutRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 
-// Uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Database
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
@@ -35,15 +33,9 @@ const connectDB = async () => {
   }
 };
 
-// Start server
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
+app.listen(PORT, async () => {
   await connectDB();
-
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-};
-
-startServer();
+  console.log(`Server running on port ${PORT}`);
+});
