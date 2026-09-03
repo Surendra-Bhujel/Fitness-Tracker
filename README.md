@@ -7,6 +7,10 @@
 
 A full-stack MERN Fitness Tracker application with secure authentication, workout management, analytics, profile management, and an admin dashboard.
 
+## 🌐 Live Demo
+
+**Live Application:** https://fitness-tracker-frontend-2gix.onrender.com
+
 ---
 
 # ✨ Features
