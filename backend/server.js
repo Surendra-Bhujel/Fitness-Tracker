@@ -1,40 +1,49 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");         
+const path = require("path");
 require("dotenv").config();
-
-
 
 const app = express();
 
-// MIDDLEWARE 
-app.use(cors());
-app.use(express.json()); // to parse JSON body
+// Middleware
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  }),
+);
 
-// ROUTES
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/workouts', require('./routes/workoutRoutes'));
-app.use('/api/admin', require('./routes/adminRoutes'));
+app.use(express.json());
 
+// Routes
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/workouts", require("./routes/workoutRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// DB CONNECTION 
+// Database
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected successfully");
   } catch (error) {
     console.error("MongoDB connection failed:", error.message);
-    process.exit(1); // stop server if DB fails
+    process.exit(1);
   }
 };
 
-// START SERVER 
+// Start server
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, async () => {
+const startServer = async () => {
   await connectDB();
-  console.log(`Server running on port ${PORT}`);
-});
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+};
+
+startServer();
